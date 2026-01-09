@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane id="screenRoot" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0">
+    <center>
+        <VBox alignment="CENTER" spacing="20.0" BorderPane.alignment="CENTER">
+            <Label text="Page 2 LOADED" />
+        </VBox>
+    </center>
+</BorderPane>
