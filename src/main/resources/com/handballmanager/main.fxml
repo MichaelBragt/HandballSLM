@@ -15,7 +15,7 @@
       <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
             <ToolBar>
-                <Button text="Page 1" onAction="#onPage1Click" />
+                <Button text="Hold Oversigt" onAction="#onPage1Click" />
                 <Button text="Page 2" onAction="#onPage2Click" />
             </ToolBar>
          </top>
