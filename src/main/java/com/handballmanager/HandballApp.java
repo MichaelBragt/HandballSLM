@@ -6,6 +6,9 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class HandballApp extends Application {
 
@@ -23,5 +26,9 @@ public class HandballApp extends Application {
         stage.setTitle("Håndbold Kamp Manager");
         stage.setScene(scene);
         stage.show();
+        TeamDAO test = new TeamDAO();
+        List<TeamModel> teams = test.selectAll();
+        System.out.println(teams);
+
     }
 }
