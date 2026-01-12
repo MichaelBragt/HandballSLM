@@ -26,9 +26,9 @@ public class HandballApp extends Application {
         stage.setTitle("Håndbold Kamp Manager");
         stage.setScene(scene);
         stage.show();
-        TeamDAO test = new TeamDAO();
-        List<TeamModel> teams = test.selectAll();
-        System.out.println(teams);
+//        TeamDAO test = new TeamDAO();
+//        List<TeamModel> teams = test.selectAll();
+//        System.out.println(teams);
 
     }
 }

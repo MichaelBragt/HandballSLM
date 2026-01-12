@@ -24,7 +24,7 @@ public enum DBConnect {
     DBConnect() {
         try {
             connection = DriverManager.getConnection(CONNECT_STRING, USER, PASSWORD);
-            System.out.println("Database connected");
+//            System.out.println("Database connected");
         }
         catch (SQLException e) {
             UIErrorReport.showDatabaseError(e);
@@ -36,11 +36,13 @@ public enum DBConnect {
         return connection;
     }
 
+    // close database connection method
+    // just in case we need it :-)
     public void close() {
         try {
             if(connection != null && !connection.isClosed()) {
                 connection.close();
-                System.out.println("Databse connection is closed");
+//                System.out.println("Database connection is closed");
             }
         }
         catch (SQLException e) {

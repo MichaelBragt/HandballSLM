@@ -19,10 +19,10 @@
          <Button onAction="#createTeam" mnemonicParsing="false" text="Opret Hold" />
       </children>
    </HBox>
-   <TableView>
+   <TableView fx:id="teamTable">
      <columns>
-       <TableColumn text="Hold Navn" />
-       <TableColumn text="Vundet - Tabt - Lige" />
+       <TableColumn fx:id="nameColumn" text="Hold Navn" />
+       <TableColumn fx:id="statColumn" text="Vundet - Tabt - Lige" />
      </columns>
       <columnResizePolicy>
          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

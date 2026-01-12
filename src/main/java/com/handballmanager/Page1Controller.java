@@ -1,14 +1,23 @@
 package com.handballmanager;
 
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
+import java.util.List;
+
 public class Page1Controller {
 
+    public TableView<TeamModel> teamTable;
+    public TableColumn<TeamModel, String> nameColumn;
+    public TableColumn<TeamModel, String> statColumn;
     TeamDAO teamDB = new TeamDAO();
 
     @FXML
@@ -17,6 +26,10 @@ public class Page1Controller {
 
     @FXML
     private StackPane contentBox;
+
+    public void initialize() {
+        loadTeams();
+    }
 
     public void bindToTimer(MatchTimeManager timer) {
         timer.setListener(remaining ->
@@ -62,8 +75,21 @@ public class Page1Controller {
             System.out.println("Opretter hold: " + name);
             TeamModel teamModel = new TeamModel(name);
             teamDB.create(teamModel);
+            loadTeams();
             // TODO: tilføj til TableView / model
         });
+    }
 
+    private void loadTeams() {
+        TeamDAO teamDAO = new TeamDAO();
+        ObservableList<TeamModel> teams = FXCollections.observableList(teamDAO.selectAll());
+
+        // This line is Java reflection, tries in order: nameProperty(), getName(), isName()
+        // nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+        // this uses the getter directly
+        nameColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
+        statColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        teamTable.setItems(teams);
     }
 }
