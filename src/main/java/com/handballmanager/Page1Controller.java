@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.StackPane;
@@ -18,6 +19,8 @@ public class Page1Controller {
     public TableView<TeamModel> teamTable;
     public TableColumn<TeamModel, String> nameColumn;
     public TableColumn<TeamModel, String> statColumn;
+    public TableColumn<TeamModel, Void> actions;
+    private MatchTimeManager timer = new MatchTimeManager();
     TeamDAO teamDB = new TeamDAO();
 
     @FXML
@@ -29,15 +32,44 @@ public class Page1Controller {
 
     public void initialize() {
         loadTeams();
-    }
-
-    public void bindToTimer(MatchTimeManager timer) {
+        timer.startGameTimer(1);
         timer.setListener(remaining ->
                 Platform.runLater(() ->
                         counter.setText(Long.toString(remaining))
                 )
         );
+
+        actions.setCellFactory(col -> new TableCell<>() {
+            private final Button deleteBtn = new Button("🗑");
+            {
+                setAlignment(Pos.CENTER);
+                deleteBtn.setOnAction(e -> {
+                    TeamModel team = getTableView().getItems().get(getIndex());
+                    if(teamDB.delete(team)) {
+                    getTableView().getItems().remove(team);
+                    }
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                setGraphic(empty ? null : deleteBtn);
+            }
+        });
+        actions.setMinWidth(40);
+        actions.setMaxWidth(40);
+        actions.setPrefWidth(40);
+
     }
+
+//    public void bindToTimer(MatchTimeManager timer) {
+//        timer.setListener(remaining ->
+//                Platform.runLater(() ->
+//                        counter.setText(Long.toString(remaining))
+//                )
+//        );
+//    }
 
     /**
      * Simpel DIALOG til popup vindue til hold oprettelse
@@ -80,6 +112,8 @@ public class Page1Controller {
         });
     }
 
+
+
     private void loadTeams() {
         TeamDAO teamDAO = new TeamDAO();
         ObservableList<TeamModel> teams = FXCollections.observableList(teamDAO.selectAll());
@@ -90,6 +124,7 @@ public class Page1Controller {
         // this uses the getter directly
         nameColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
         statColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+//        actions.setCellFactory();
         teamTable.setItems(teams);
     }
 }

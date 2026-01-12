@@ -35,6 +35,21 @@ public class TeamDAO {
         }
     }
 
+    public boolean delete(TeamModel team) {
+        // Try with resource, this is a safe way to use statements, as it auto closes after it is done
+        // Syntax is: try() {}
+        // this syntax returns the id of the created row, we need to decide if we need that
+        try (PreparedStatement stmt = DBConnect.UNIQUE_CONNECT.getConnection().prepareStatement(DELETE)) {
+            stmt.setInt(1, team.getId());
+            int rows = stmt.executeUpdate();
+            return rows == 1;
+        }
+        catch (SQLException e) {
+            UIErrorReport.showDatabaseError(e);
+            throw new RuntimeException("Failed to delete team", e);
+        }
+    }
+
     public List<TeamModel> selectAll() {
         List<TeamModel> teams = new ArrayList<>();
 

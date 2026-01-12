@@ -6,41 +6,33 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.StackPane?>
 
-<StackPane xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.handballmanager.ManagerController">
-      <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <top>
-            <ToolBar>
-                <Button onAction="#onPage1Click" text="Hold Oversigt" />
-                <Button onAction="#onPage2Click" text="Page 2" />
-            </ToolBar>
-         </top>
-          <center>
-             <StackPane fx:id="contentBox" />
-          </center>
-      </BorderPane>
-<!--       <BorderPane fx:id="contentBox" />-->
-<!--           <center>-->
-<!--               <VBox alignment="CENTER" spacing="20.0" BorderPane.alignment="CENTER">-->
-<!--                   <padding>-->
-<!--                       <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />-->
-<!--                   </padding>-->
-<!--                   <Text fx:id="welcomeText"></Text>-->
-<!--                   <Label fx:id="counter" />-->
-<!--                   <Button onAction="#onHelloButtonClick" text="Hello!" />-->
-<!--               </VBox>-->
-<!--           </center>-->
-<!--       </BorderPane>-->
-
-<!--      <BorderPane id="screenRoot" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0">-->
-<!--         <center>-->
-<!--            <VBox alignment="CENTER" spacing="20.0" BorderPane.alignment="CENTER">-->
-<!--                <padding>-->
-<!--                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />-->
-<!--                </padding>-->
-<!--                <Text fx:id="welcomeText"></Text>-->
-<!--                <Label fx:id="counter" />-->
-<!--                <Button onAction="#onHelloButtonClick" text="Hello!" />-->
-<!--            </VBox>-->
-<!--         </center>-->
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.Tab?>
+<!--<StackPane xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.handballmanager.ManagerController">-->
+<!--      <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">-->
+<!--         <top>-->
+<!--            <ToolBar>-->
+<!--                <Button onAction="#onPage1Click" text="Hold Oversigt" />-->
+<!--                <Button onAction="#onPage2Click" text="Page 2" />-->
+<!--            </ToolBar>-->
+<!--         </top>-->
+<!--          <center>-->
+<!--             <StackPane fx:id="contentBox" />-->
+<!--          </center>-->
 <!--      </BorderPane>-->
-</StackPane>
+<!--</StackPane>-->
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.handballmanager.ManagerController">
+    <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <tabs>
+            <Tab text="Hold Oversigt" fx:id="teamsTab">
+<!--                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />-->
+                    <fx:include source="page1.fxml" />
+            </Tab>
+            <Tab text="Kamp Oversigt" fx:id="matchesTab">
+<!--                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />-->
+                    <fx:include source="page2.fxml" />
+            </Tab>
+        </tabs>
+    </TabPane>
+</AnchorPane>
