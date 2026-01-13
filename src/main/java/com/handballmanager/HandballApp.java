@@ -19,7 +19,7 @@ public class HandballApp extends Application {
 
 
         FXMLLoader fxmlLoader = new FXMLLoader(HandballApp.class.getResource("main.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 800, 600);
+        Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Håndbold Kamp Manager");
         stage.setScene(scene);
         stage.show();

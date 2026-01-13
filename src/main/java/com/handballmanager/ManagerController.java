@@ -13,7 +13,13 @@ public class ManagerController {
     public Label counter;
 
     @FXML
-    private Label welcomeText;
+    public Label halvegCounter;
+
+    @FXML
+    public Label scoreCounterL;
+
+    @FXML
+    public Label scoreCounterR;
 
     public void initialize() {
 
@@ -24,11 +30,13 @@ public class ManagerController {
         );
         timer.startGameTimer(1);
 
+
+
 //        counter.setText("TEST");
     }
 
-    @FXML
-    protected void onHelloButtonClick() {
-        welcomeText.setText("Welcome to JavaFX Application!");
-    }
+    //@FXML
+    //protected void onHelloButtonClick() {
+        //welcomeText.setText("Welcome to JavaFX Application!");
+    //}
 }
