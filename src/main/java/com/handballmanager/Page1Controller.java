@@ -46,7 +46,7 @@ public class Page1Controller {
                 deleteBtn.setOnAction(e -> {
                     TeamModel team = getTableView().getItems().get(getIndex());
                     if(teamDB.delete(team)) {
-                    getTableView().getItems().remove(team);
+                        getTableView().getItems().remove(team);
                     }
                 });
             }
