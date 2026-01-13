@@ -16,6 +16,10 @@ public class TeamDAO {
     private static final String UPDATE = "UPDATE Team SET name = ? WHERE id = ?";
     private static final String SELECT_ALL = "SELECT * FROM Team";
 
+    /**
+     * Method for creating Team in database
+     * @param team
+     */
     public void create(TeamModel team) {
         // Try with resource, this is a safe way to use statements, as it auto closes after it is done
         // Syntax is: try() {}
