@@ -29,4 +29,10 @@ public class TeamModel {
     public void setName(String name) {
         this.name = name;
     }
+
+    // tosTring for at vise navn på hold
+    @Override
+    public String toString() {
+        return name;
+    }
 }

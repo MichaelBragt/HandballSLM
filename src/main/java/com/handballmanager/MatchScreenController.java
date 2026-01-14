@@ -18,8 +18,6 @@ public class MatchScreenController {
 
     private MatchTimeManager timer = new MatchTimeManager();
 
-
-
     public void initialize() {
         timer.startGameTimer(1);
         timer.setListener(remaining ->
@@ -27,6 +25,5 @@ public class MatchScreenController {
                         counter.setText(Long.toString(remaining))
                 )
         );
-        }
-
+    }
 }
