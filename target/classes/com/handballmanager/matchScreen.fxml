@@ -5,15 +5,19 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.handballmanager.ManagerController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.handballmanager.MatchScreenController">
    <children>
-      <Label fx:id="halvegCounter" layoutX="39.0" layoutY="14.0" text="Nd'e Halveg" />
-      <Label fx:id="counter" alignment="CENTER" layoutX="283.0" layoutY="58.0" prefHeight="17.0" prefWidth="36.0" text="txt" textAlignment="CENTER" />
-      <Button layoutX="96.0" layoutY="96.0" mnemonicParsing="false" text="Mål" />
-      <Button layoutX="435.0" layoutY="96.0" mnemonicParsing="false" text="Stop/start tid" />
-      <Button layoutX="267.0" layoutY="96.0" mnemonicParsing="false" text="Rødt Kort" />
+      <Label layoutX="39.0" layoutY="14.0" text="Nd'e Halveg" />
+      <Label fx:id="counter" alignment="CENTER" layoutX="282.0" layoutY="31.0" prefHeight="17.0" prefWidth="36.0" text="txt" textAlignment="CENTER">
+         <font>
+            <Font size="23.0" />
+         </font></Label>
+      <Button fx:id="t1GoalButton" layoutX="54.0" layoutY="96.0" mnemonicParsing="false" text="Mål" />
+      <Button fx:id="startStopTimer" layoutX="250.0" layoutY="96.0" mnemonicParsing="false" text="Stop/start tid" />
+      <Button fx:id="t1RedCardButton" layoutX="116.0" layoutY="95.0" mnemonicParsing="false" text="Rødt Kort" />
       <TableView layoutX="28.0" layoutY="150.0" prefHeight="230.0" prefWidth="539.0" AnchorPane.bottomAnchor="28.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="28.0">
         <columns>
           <TableColumn prefWidth="221.0" text="Hændelse" />
@@ -21,8 +25,10 @@
             <TableColumn prefWidth="238.0" text="Hold navn" />
         </columns>
       </TableView>
-      <Label fx:id="scoreCounterL" layoutX="508.0" layoutY="14.0" prefHeight="17.0" prefWidth="14.0" text="L" />
-      <Label fx:id="scoreCounterR" layoutX="540.0" layoutY="14.0" prefHeight="17.0" prefWidth="14.0" text="R" />
-      <Text layoutX="522.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="/" wrappingWidth="14.0" />
+      <Label fx:id="scoreCounterT1" layoutX="501.0" layoutY="14.0" prefHeight="17.0" prefWidth="14.0" text="T1" />
+      <Label fx:id="scoreCounterT2" layoutX="534.0" layoutY="14.0" prefHeight="17.0" prefWidth="14.0" text="T2" />
+      <Text layoutX="515.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="  /" wrappingWidth="14.0" />
+      <Button fx:id="t2GoalButton" layoutX="414.0" layoutY="96.0" mnemonicParsing="false" text="Mål" />
+      <Button fx:id="t2RedCardButton" layoutX="474.0" layoutY="96.0" mnemonicParsing="false" text="Rødt Kort" />
    </children>
 </AnchorPane>

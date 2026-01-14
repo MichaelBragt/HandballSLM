@@ -2,6 +2,7 @@ module com.handballmanager {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
+    requires javafx.graphics;
 
 
     opens com.handballmanager to javafx.fxml;
