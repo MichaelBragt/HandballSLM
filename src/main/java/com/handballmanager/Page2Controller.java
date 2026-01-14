@@ -6,10 +6,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -17,8 +14,6 @@ import javafx.stage.Stage;
 import java.lang.reflect.Array;
 
 public class Page2Controller {
-
-
 
     public TableView<MatchModel> matchTable;
     public TableColumn<MatchModel, String> teamAColumn;
@@ -30,8 +25,12 @@ public class Page2Controller {
 
     public Button newMatchButton;
 
+    public void initialize() {
+        loadMatches();
+    }
+
      public void setNewMatchButtonPressed(ActionEvent e){
-            Array[] hold = {"hold1", "hold2", "hold3"};
+//            Array[] hold = {"hold1", "hold2", "hold3"};
 
              // ny Dialog og set title
              Dialog<String> dialog = new Dialog<>();
@@ -60,13 +59,13 @@ public class Page2Controller {
              });
 
              // Vis dialogboksen og check om der er en return værdi (skriv i terminal)
-             dialog.showAndWait().ifPresent(name -> {
-                 System.out.println("Opretter hold: " + name);
-                 TeamModel teamModel = new TeamModel(name);
-                 teamDB.create(teamModel);
-                 loadTeams();
-                 // TODO: tilføj til TableView / model
-             });
+//             dialog.showAndWait().ifPresent(name -> {
+//                 System.out.println("Opretter hold: " + name);
+//                 TeamModel teamModel = new TeamModel(name);
+//                 teamDB.create(teamModel);
+//                 loadTeams();
+//                 // TODO: tilføj til TableView / model
+//             });
     }
 
     private void loadMatches() {
