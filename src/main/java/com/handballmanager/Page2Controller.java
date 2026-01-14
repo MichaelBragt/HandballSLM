@@ -1,17 +1,14 @@
 package com.handballmanager;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-
-import java.lang.reflect.Array;
 
 public class Page2Controller {
 
@@ -21,7 +18,8 @@ public class Page2Controller {
     public TableColumn<MatchModel, String> teamBColumn;
     public Label counter;
     public VBox vBoxContent;
-    Stage window = new Stage();
+
+    @FXML public ManagerController managerController;
 
     public Button newMatchButton;
 
@@ -29,44 +27,81 @@ public class Page2Controller {
         loadMatches();
     }
 
-     public void setNewMatchButtonPressed(ActionEvent e){
-//            Array[] hold = {"hold1", "hold2", "hold3"};
-
-             // ny Dialog og set title
-             Dialog<String> dialog = new Dialog<>();
-             dialog.setTitle("Ny kamp");
-
-             // lav en opret hold knap i dialog boksen (ok knap)
-             ButtonType opretBtn = new ButtonType("Start", ButtonBar.ButtonData.OK_DONE);
-             //add knappen + en cancel knap
-             dialog.getDialogPane().getButtonTypes().addAll(opretBtn, ButtonType.CANCEL);
-
-             // Lav et tesktfelt med prompt title
-             TextField holdNavn = new TextField();
-             holdNavn.setPromptText("Holdnavn");
-
-             // sæt indhold af dialog boksen
-             dialog.getDialogPane().setContent(
-                     new VBox(10, new Label("Holdnavn:"), holdNavn)
-             );
-
-             // HVIS Ok klikkes converter return værdien til en string
-             dialog.setResultConverter(button -> {
-                 if(button == opretBtn) {
-                     return holdNavn.getText();
-                 }
-                 return null;
-             });
-
-             // Vis dialogboksen og check om der er en return værdi (skriv i terminal)
-//             dialog.showAndWait().ifPresent(name -> {
-//                 System.out.println("Opretter hold: " + name);
-//                 TeamModel teamModel = new TeamModel(name);
-//                 teamDB.create(teamModel);
-//                 loadTeams();
-//                 // TODO: tilføj til TableView / model
-//             });
+    public void setManagerController(ManagerController managerController) {
+        this.managerController = managerController;
     }
+
+     public void setNewMatchButtonPressed(){
+
+        // Opret Team Data Access Object
+        TeamDAO teamDAO = new TeamDAO();
+        // Opret en observable list med alle vores teams (selectAll)
+        ObservableList<TeamModel> teams = FXCollections.observableArrayList(teamDAO.selectAll());
+
+        // Opret ny Dialog og set title
+        Dialog<Void> dialog = new Dialog<>();
+        dialog.setTitle("Ny kamp");
+
+        //
+        ButtonType opretBtn = new ButtonType("Start", ButtonBar.ButtonData.OK_DONE);
+        //add knappen + en cancel knap
+        dialog.getDialogPane().getButtonTypes().addAll(opretBtn, ButtonType.CANCEL);
+
+        // Gem OK knappen i en Node til brug for event senere,
+        // kræves for at holde vores error dialog box åben
+        // Da javaFx ellers per default lukker vores Dialog fordi den auto closer efter et OK
+        // event klik.... Vi vil holde vores Dialog åben hvis der er være fejl
+        Node okBtn = dialog.getDialogPane().lookupButton(opretBtn);
+
+        // Opret en Combobox (Selectlist)
+        ComboBox<TeamModel> teamAlist = new ComboBox<>(teams);
+        // Fyld den i bredden
+        teamAlist.setMaxWidth(Double.MAX_VALUE);
+        // Sæt default prompt tekst
+        teamAlist.setPromptText("Vælg hold");
+
+        ComboBox<TeamModel> teamBlist = new ComboBox<>(teams);
+        teamBlist.setMaxWidth(Double.MAX_VALUE);
+        teamBlist.setPromptText("Vælg hold");
+
+        // Opret det indhold vi skal have i Dialog boksen
+        VBox content = new VBox(10);
+        Label labelA = new Label("Hjemmehold");
+        Label labelB = new Label("Udehold");
+        // Tilføj vores indhold til vores VBox
+        content.getChildren().addAll(labelA, teamAlist, labelB, teamBlist);
+        // Tilføj vores VBox til vores Dialog
+        dialog.getDialogPane().setContent(content);
+
+        // Event filter på vores gemte knap NODE
+        // med consume i tilfælde af fejl, så vores Dialog ikke lukker ved fejl
+        okBtn.addEventFilter(ActionEvent.ACTION, e -> {
+
+             TeamModel teamA = teamAlist.getValue();
+             TeamModel teamB = teamBlist.getValue();
+
+             if(teamA == null || teamB == null) {
+                 showError("Du skal vælge 2 hold");
+                 e.consume();
+                 return;
+             }
+
+             if(teamA.equals(teamB)) {
+                 showError("Et hold kan ikke spille mod sig selv\nVælg 2 forskellige hold");
+                 e.consume();
+                 return;
+             }
+
+            System.out.println("Ok done");
+
+             // To do: hvad skal der ske ved OK
+
+            managerController.focusLiveMatchTab();
+         });
+         // Vis vores Dialog
+         dialog.showAndWait();
+    }
+
 
     private void loadMatches() {
         MatchDAO matchDAO = new MatchDAO();
@@ -84,4 +119,11 @@ public class Page2Controller {
         matchTable.setItems(matches);
     }
 
+    private void showError(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Ugyldigt valg");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 }

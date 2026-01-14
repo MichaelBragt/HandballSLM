@@ -63,14 +63,6 @@ public class Page1Controller {
 
     }
 
-//    public void bindToTimer(MatchTimeManager timer) {
-//        timer.setListener(remaining ->
-//                Platform.runLater(() ->
-//                        counter.setText(Long.toString(remaining))
-//                )
-//        );
-//    }
-
     /**
      * Simpel DIALOG til popup vindue til hold oprettelse
      */

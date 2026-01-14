@@ -23,7 +23,7 @@
 <!--</StackPane>-->
 
 <AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.handballmanager.ManagerController">
-    <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+    <TabPane fx:id="mainTabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <tabs>
             <Tab text="Hold Oversigt" fx:id="teamsTab">
 <!--                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />-->
@@ -31,7 +31,10 @@
             </Tab>
             <Tab text="Kamp Oversigt" fx:id="matchesTab">
 <!--                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />-->
-                    <fx:include source="page2.fxml" />
+                    <fx:include fx:id="LiveMatchView" source="page2.fxml" />
+            </Tab>
+            <Tab text="Live Kamp" fx:id="liveMatchTab">
+                <fx:include source="matchPage.fxml" />
             </Tab>
         </tabs>
     </TabPane>
