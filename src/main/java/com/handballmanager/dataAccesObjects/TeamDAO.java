@@ -1,5 +1,7 @@
-package com.handballmanager;
+package com.handballmanager.dataAccesObjects;
 
+import com.handballmanager.DBConnect;
+import com.handballmanager.models.TeamModel;
 import com.handballmanager.utils.UIErrorReport;
 
 import java.sql.PreparedStatement;

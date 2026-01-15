@@ -1,5 +1,6 @@
-package com.handballmanager;
+package com.handballmanager.controllers;
 
+import com.handballmanager.models.MatchModel;
 import javafx.scene.control.*;
 
 import java.time.LocalDateTime;

@@ -1,11 +1,12 @@
-package com.handballmanager;
+package com.handballmanager.controllers;
 
+import com.handballmanager.MatchTimeManager;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 
-public class ManagerController {
+public class MainController {
 
     @FXML public TabPane mainTabPane;
     @FXML private Tab liveMatchTab;
@@ -19,7 +20,7 @@ public class ManagerController {
     MatchTimeManager timer = new MatchTimeManager();
 
     public void initialize() {
-        LiveMatchViewController.setManagerController(this);
+        LiveMatchViewController.setMainController(this);
         timer.startGameTimer(1);
     }
 

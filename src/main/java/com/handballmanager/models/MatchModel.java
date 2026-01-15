@@ -1,4 +1,4 @@
-package com.handballmanager;
+package com.handballmanager.models;
 
 import java.time.LocalDateTime;
 

@@ -1,18 +1,18 @@
-package com.handballmanager;
+package com.handballmanager.controllers;
 
+import com.handballmanager.MatchTimeManager;
+import com.handballmanager.dataAccesObjects.TeamDAO;
+import com.handballmanager.models.TeamModel;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-
-import java.util.List;
 
 public class Page1Controller {
 
