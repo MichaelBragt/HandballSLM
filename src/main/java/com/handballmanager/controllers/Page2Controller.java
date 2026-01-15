@@ -1,5 +1,9 @@
-package com.handballmanager;
+package com.handballmanager.controllers;
 
+import com.handballmanager.dataAccesObjects.MatchDAO;
+import com.handballmanager.dataAccesObjects.TeamDAO;
+import com.handballmanager.models.MatchModel;
+import com.handballmanager.models.TeamModel;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -19,7 +23,7 @@ public class Page2Controller {
     public Label counter;
     public VBox vBoxContent;
 
-    @FXML public ManagerController managerController;
+    @FXML public MainController mainController;
 
     public Button newMatchButton;
 
@@ -27,8 +31,8 @@ public class Page2Controller {
         loadMatches();
     }
 
-    public void setManagerController(ManagerController managerController) {
-        this.managerController = managerController;
+    public void setMainController(MainController mainController) {
+        this.mainController = mainController;
     }
 
      public void setNewMatchButtonPressed(){
@@ -96,7 +100,7 @@ public class Page2Controller {
 
              // To do: hvad skal der ske ved OK
 
-            managerController.focusLiveMatchTab();
+            mainController.focusLiveMatchTab();
          });
          // Vis vores Dialog
          dialog.showAndWait();

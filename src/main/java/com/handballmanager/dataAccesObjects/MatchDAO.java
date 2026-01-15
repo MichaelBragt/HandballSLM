@@ -1,15 +1,33 @@
-package com.handballmanager;
+package com.handballmanager.dataAccesObjects;
 
+import com.handballmanager.DBConnect;
+import com.handballmanager.models.MatchModel;
+import com.handballmanager.models.TeamModel;
 import com.handballmanager.utils.UIErrorReport;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MatchDAO {
+
+    private enum MatchStatus {
+        NOT_STARTED("Ikke startet"),
+        RUNNING("Igang"),
+        FINISHED("Afviklet");
+
+        private final String label;
+
+        MatchStatus(String label) {
+            this.label = label;
+        }
+
+        public String getLabel() {
+            return label;
+        }
+    }
 
     private static final String INSERT = "INSERT INTO Match (team_1_id, team_2_id, start_time, end_time, status) VALUES (?,?,?,?,?)";
     private static final String DELETE = "DELETE FROM Match WHERE id = ?";
