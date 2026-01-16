@@ -9,17 +9,15 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="vBoxContent" alignment="CENTER" maxHeight="Infinity" maxWidth="Infinity" spacing="20.0" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.handballmanager.controllers.Page1Controller">
+<VBox fx:id="vBoxContent" alignment="TOP_CENTER" maxHeight="Infinity" maxWidth="Infinity" spacing="20.0" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.handballmanager.controllers.Page1Controller">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
-    <Label fx:id="counter" />
+<!--    <Label fx:id="counter" />-->
    <HBox>
-      <children>
          <Button onAction="#createTeam" mnemonicParsing="false" text="Opret Hold" />
-      </children>
    </HBox>
-   <TableView fx:id="teamTable">
+   <TableView fx:id="teamTable" VBox.vgrow="ALWAYS">
      <columns>
        <TableColumn fx:id="nameColumn" text="Hold Navn" />
        <TableColumn fx:id="statColumn" text="Vundet - Tabt - Lige" />

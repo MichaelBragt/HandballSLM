@@ -9,9 +9,17 @@ public class MatchModel {
     private TeamModel team2;
     private LocalDateTime start_time;
     private LocalDateTime end_time;
-    private String status;
+    private MatchStatus status;
 
-    public MatchModel(int id, TeamModel team1, TeamModel team2, LocalDateTime start_time, LocalDateTime end_time, String status) {
+    public MatchModel(TeamModel team1, TeamModel team2, LocalDateTime start_time, LocalDateTime end_time, MatchStatus status) {
+        this.team1 = team1;
+        this.team2 = team2;
+        this.start_time = start_time;
+        this.end_time = end_time;
+        this.status = status;
+    }
+
+    public MatchModel(int id, TeamModel team1, TeamModel team2, LocalDateTime start_time, LocalDateTime end_time, MatchStatus status) {
         this.id = id;
         this.team1 = team1;
         this.team2 = team2;
@@ -23,6 +31,8 @@ public class MatchModel {
     public int getId() {
         return id;
     }
+
+    public void setId(int id) { this.id = id; }
 
     public TeamModel getTeam1() {
         return team1;
@@ -56,11 +66,11 @@ public class MatchModel {
         this.end_time = end_time;
     }
 
-    public String getStatus() {
+    public MatchStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(MatchStatus status) {
         this.status = status;
     }
 }

@@ -12,12 +12,12 @@ import java.util.List;
 
 public class HandballApp extends Application {
 
-    MatchTimeManager timer = new MatchTimeManager();
+//    MatchTimeManager timer = new MatchTimeManager();
 
     @Override
     public void start(Stage stage) throws IOException {
 
-        timer.startGameTimer(1);
+//        timer.startGameTimer(1);
 
 
 
@@ -30,5 +30,10 @@ public class HandballApp extends Application {
 //        List<TeamModel> teams = test.selectAll();
 //        System.out.println(teams);
 
+    }
+
+    @Override
+    public void stop() {
+        MatchTimeManager.shutdownAll();
     }
 }

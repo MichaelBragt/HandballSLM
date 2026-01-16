@@ -3,6 +3,7 @@ package com.handballmanager.controllers;
 import com.handballmanager.dataAccesObjects.MatchDAO;
 import com.handballmanager.dataAccesObjects.TeamDAO;
 import com.handballmanager.models.MatchModel;
+import com.handballmanager.models.MatchStatus;
 import com.handballmanager.models.TeamModel;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
@@ -99,13 +100,14 @@ public class Page2Controller {
             System.out.println("Ok done");
 
              // To do: hvad skal der ske ved OK
-
-            mainController.focusLiveMatchTab();
+            MatchDAO matchDAO = new MatchDAO();
+            MatchModel match = new MatchModel(teamA, teamB, null, null, MatchStatus.NOT_STARTED);
+            matchDAO.create(match);
+            mainController.focusLiveMatchTab(match);
          });
          // Vis vores Dialog
          dialog.showAndWait();
     }
-
 
     private void loadMatches() {
         MatchDAO matchDAO = new MatchDAO();
