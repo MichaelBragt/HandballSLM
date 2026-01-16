@@ -4,32 +4,16 @@ import com.handballmanager.DBConnect;
 import com.handballmanager.models.MatchModel;
 import com.handballmanager.models.TeamModel;
 import com.handballmanager.utils.UIErrorReport;
+import com.handballmanager.models.MatchStatus;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MatchDAO {
 
-    private enum MatchStatus {
-        NOT_STARTED("Ikke startet"),
-        RUNNING("Igang"),
-        FINISHED("Afviklet");
-
-        private final String label;
-
-        MatchStatus(String label) {
-            this.label = label;
-        }
-
-        public String getLabel() {
-            return label;
-        }
-    }
-
-    private static final String INSERT = "INSERT INTO Match (team_1_id, team_2_id, start_time, end_time, status) VALUES (?,?,?,?,?)";
+    private static final String INSERT = "INSERT INTO Match (team_1_id, team_2_id, match_length, start_time, end_time, status) VALUES (?,?,?,?,?,?)";
     private static final String DELETE = "DELETE FROM Match WHERE id = ?";
     private static final String UPDATE = "UPDATE Match SET (team_1_id, team_2_id, start_time, end_time, status) = (?,?,?,?,?) WHERE id = ?";
     private static final String SELECT_ALL =
@@ -38,20 +22,50 @@ public class MatchDAO {
             " JOIN Team t1 ON m.team_1_id = t1.id" +
             " JOIN Team t2 ON m.team_2_id = t2.id";
 
+    public void create(MatchModel match) {
+        // Try with resource, this is a safe way to use statements, as it auto closes after it is done
+        // Syntax is: try() {}
+        // this syntax returns the id of the created row, we need to decide if we need that
+        try (PreparedStatement stmt = DBConnect.UNIQUE_CONNECT.getConnection().prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setInt(1, match.getTeam1().getId());
+            stmt.setInt(2, match.getTeam2().getId());
+            stmt.setInt(3, 60);
+            stmt.setNull(4, Types.TIMESTAMP);
+            stmt.setNull(5, Types.TIMESTAMP);
+            stmt.setString(6, MatchStatus.NOT_STARTED.name());
+            stmt.executeUpdate();
+            try (ResultSet keys = stmt.getGeneratedKeys()) {
+                if (keys.next()) {
+                    match.setId(keys.getInt(1));
+                }
+            }
+        }
+        catch (SQLException e) {
+            UIErrorReport.showDatabaseError(e);
+            throw new RuntimeException("Failed to create team", e);
+        }
+    }
+
     public List<MatchModel> selectAll() {
         List<MatchModel> matches = new ArrayList<>();
+
 
         try(PreparedStatement stmt = DBConnect.UNIQUE_CONNECT.getConnection().prepareStatement(SELECT_ALL);
             ResultSet result = stmt.executeQuery();
         ) {
             while(result.next()) {
+
+                MatchStatus status = MatchStatus.fromDb(result.getString("status"));
+                Timestamp startTs = result.getTimestamp("start_time");
+                Timestamp endTs   = result.getTimestamp("end_time");
+
                 matches.add(new MatchModel(
                         result.getInt("id"),
                         new TeamModel(result.getString("team1_name")),
                         new TeamModel(result.getString("team2_name")),
-                        result.getTimestamp("start_time").toLocalDateTime(),
-                        result.getTimestamp("end_time").toLocalDateTime(),
-                        result.getString("status")
+                        startTs == null ? null : startTs.toLocalDateTime(),
+                        endTs == null ? null : endTs.toLocalDateTime(),
+                        status
                 ));
 
             }

@@ -10,17 +10,15 @@
 <?import javafx.scene.control.TableColumn?>
 
 <!--Match table-->
-<VBox fx:id="vBoxContent" alignment="CENTER" maxHeight="Infinity" maxWidth="Infinity" spacing="20.0" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.handballmanager.controllers.Page2Controller">
+<VBox fx:id="vBoxContent" alignment="TOP_CENTER" maxHeight="Infinity" maxWidth="Infinity" spacing="20.0" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.handballmanager.controllers.Page2Controller">
 <padding>
     <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
 </padding>
-<Label fx:id="counter" />
+<!--<Label fx:id="counter" />-->
 <HBox>
-    <children>
         <Button fx:id="newMatchButton" mnemonicParsing="false" onAction="#setNewMatchButtonPressed" text="Ny kamp" />
-    </children>
 </HBox>
-<TableView fx:id="matchTable">
+<TableView fx:id="matchTable" VBox.vgrow="ALWAYS">
     <columns>
         <TableColumn fx:id="teamAColumn" text="Hold Navn" />
         <TableColumn fx:id="scoreBoardColumn" text="Stilling" />

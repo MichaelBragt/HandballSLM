@@ -20,7 +20,7 @@ public class Page1Controller {
     public TableColumn<TeamModel, String> nameColumn;
     public TableColumn<TeamModel, String> statColumn;
     public TableColumn<TeamModel, Void> actions;
-    private MatchTimeManager timer = new MatchTimeManager();
+
     TeamDAO teamDB = new TeamDAO();
 
     @FXML
@@ -32,12 +32,6 @@ public class Page1Controller {
 
     public void initialize() {
         loadTeams();
-        timer.startGameTimer(1);
-        timer.setListener(remaining ->
-                Platform.runLater(() ->
-                        counter.setText(Long.toString(remaining))
-                )
-        );
 
         actions.setCellFactory(col -> new TableCell<>() {
             private final Button deleteBtn = new Button("🗑");
@@ -100,10 +94,8 @@ public class Page1Controller {
             TeamModel teamModel = new TeamModel(name);
             teamDB.create(teamModel);
             loadTeams();
-            // TODO: tilføj til TableView / model
         });
     }
-
 
 
     private void loadTeams() {

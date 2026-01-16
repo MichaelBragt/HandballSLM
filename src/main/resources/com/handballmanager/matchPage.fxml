@@ -8,17 +8,51 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.text.Text?>
 
-
-<!--Match table-->
-<VBox fx:id="vBoxContent" alignment="CENTER" maxHeight="Infinity" maxWidth="Infinity" spacing="20.0" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.handballmanager.controllers.MatchPageController">
+<!-- Main VBox -->
+<!--<VBox VBox.vgrow="ALWAYS" fx:id="rootBox" alignment="TOP_CENTER" maxHeight="Infinity" maxWidth="Infinity" spacing="20.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.handballmanager.controllers.MatchPageController">-->
+<?import javafx.scene.layout.Region?>
+<BorderPane fx:id="rootBox" maxHeight="Infinity" maxWidth="Infinity" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.handballmanager.controllers.MatchPageController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
-    <Label fx:id="counter" />
-    <HBox>
-            <Button fx:id="newMatchButton" mnemonicParsing="false" text="Ny kamp" />
+    <!-- Top -->
+    <top>
+    <HBox fx:id="topBox">
+        <!-- Left side-->
+        <VBox fx:id="topLeftBox" alignment="TOP_CENTER">
+            <Text fx:id="leftSideTeam" textAlignment="CENTER" styleClass="teamNames" />
+            <Text fx:id="leftSideScore" textAlignment="CENTER" styleClass="teamScores" text="0" />
+            <Region VBox.vgrow="ALWAYS" />
+            <HBox alignment="BOTTOM_CENTER" spacing="10">
+                <Button fx:id="leftTeamGoal" onAction="#goal_scored" text="Mål" />
+                <Button fx:id="leftTeamPenalty" text="Rødt Kort" />
+            </HBox>
+        </VBox>
+        <!-- Center-->
+        <VBox fx:id="topMidBox">
+            <VBox alignment="CENTER">
+                <Label fx:id="counter" styleClass="match-timer" />
+                <Button fx:id="timerButton" visible="false" managed="false" onAction="#timerClicked" />
+            </VBox>
+        </VBox>
+        <!-- Right side-->
+        <VBox fx:id="topRightBox" alignment="TOP_CENTER">
+            <Text fx:id="rightSideTeam" text="Right Side" textAlignment="CENTER" styleClass="teamNames" />
+            <Text fx:id="rightSideScore" textAlignment="CENTER" styleClass="teamScores" text="0" />
+            <Region VBox.vgrow="ALWAYS" />
+            <HBox spacing="10" alignment="BOTTOM_CENTER">
+                <Button fx:id="rightTeamGoal" text="Mål" onAction="#goal_scored" />
+                <Button fx:id="rightTeamPenalty" text="Rødt Kort" />
+            </HBox>
+        </VBox>
     </HBox>
+    </top>
+    <center>
+    <VBox fx:id="noMatchText" alignment="CENTER" VBox.vgrow="ALWAYS">
+        <Text textAlignment="CENTER" text="Ingen Aktiv Kamp" />
+    </VBox>
     <TableView fx:id="liveMatchTable">
         <columns>
             <TableColumn fx:id="eventDetail" text="Hændelse" />
@@ -30,4 +64,6 @@
 <!--            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />-->
 <!--        </columnResizePolicy>-->
     </TableView>
-</VBox>
+    </center>
+</BorderPane>
+        <!--</VBox>-->
