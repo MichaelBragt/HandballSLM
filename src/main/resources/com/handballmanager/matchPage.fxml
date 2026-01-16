@@ -10,8 +10,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.text.Text?>
 
-<!-- Main VBox -->
-<!--<VBox VBox.vgrow="ALWAYS" fx:id="rootBox" alignment="TOP_CENTER" maxHeight="Infinity" maxWidth="Infinity" spacing="20.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.handballmanager.controllers.MatchPageController">-->
+<!-- Main BorderPane -->
 <?import javafx.scene.layout.Region?>
 <BorderPane fx:id="rootBox" maxHeight="Infinity" maxWidth="Infinity" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.handballmanager.controllers.MatchPageController">
     <padding>
@@ -27,7 +26,7 @@
             <Region VBox.vgrow="ALWAYS" />
             <HBox alignment="BOTTOM_CENTER" spacing="10">
                 <Button fx:id="leftTeamGoal" onAction="#goal_scored" text="Mål" />
-                <Button fx:id="leftTeamPenalty" text="Rødt Kort" />
+                <Button fx:id="leftTeamPenalty" text="Rødt Kort" onAction="#penalty" />
             </HBox>
         </VBox>
         <!-- Center-->
@@ -44,7 +43,7 @@
             <Region VBox.vgrow="ALWAYS" />
             <HBox spacing="10" alignment="BOTTOM_CENTER">
                 <Button fx:id="rightTeamGoal" text="Mål" onAction="#goal_scored" />
-                <Button fx:id="rightTeamPenalty" text="Rødt Kort" />
+                <Button fx:id="rightTeamPenalty" text="Rødt Kort" onAction="#penalty" />
             </HBox>
         </VBox>
     </HBox>
@@ -66,4 +65,3 @@
     </TableView>
     </center>
 </BorderPane>
-        <!--</VBox>-->
