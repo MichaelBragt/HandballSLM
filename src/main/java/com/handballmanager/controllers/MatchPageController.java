@@ -3,10 +3,8 @@ package com.handballmanager.controllers;
 import com.handballmanager.MatchTimeManager;
 import com.handballmanager.dataAccesObjects.GoalDAO;
 import com.handballmanager.dataAccesObjects.MatchDAO;
-import com.handballmanager.models.GoalModel;
-import com.handballmanager.models.MatchEvent;
-import com.handballmanager.models.MatchModel;
-import com.handballmanager.models.TeamModel;
+import com.handballmanager.dataAccesObjects.PenaltyDAO;
+import com.handballmanager.models.*;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -217,6 +215,63 @@ public class MatchPageController {
                 return;
             }
             matchEvent = new MatchEvent("Mål", time, team_id.getName());
+            liveEvents.add(matchEvent);
+            updateUI();
+        }
+        catch (RuntimeException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * method to update goal score in UI and database
+     * @param event
+     */
+    public void penalty(ActionEvent event) {
+        // We get the button clicked so we can know which teams goal button was clicked
+        Button clickedButton = (Button) event.getSource();
+        TeamModel team_id;
+
+        // we check which teams button was clicked and get the Team object
+        if(clickedButton == leftTeamPenalty) {
+            team_id = match.getTeam1();
+        }
+        else if(clickedButton == rightTeamPenalty) {
+            team_id = match.getTeam2();
+        }
+        else {
+            return;
+        }
+        // goal score time should be how long into the game is was scored
+        // so we set time to game length (60) - remaining time
+        long time = 60 - timer.getRemainingGameTime();
+        // goal time as DateTime object
+        LocalDateTime goal_time = LocalDateTime.now();
+        // We create a Goal object with our data
+        PenaltyModel penalty = new PenaltyModel(match.getId(), team_id.getId(), time, goal_time);
+        // instantiate a GoalDAO object to make DB calls
+        PenaltyDAO penaltyDAO = new PenaltyDAO();
+
+        // We wrap the Goal database call in a try/catch because we want to change the goal scoreboard
+        // in the UI, but if writing to DB fails it should not do that
+        try {
+            // insert goal in database
+            penaltyDAO.create(penalty);
+
+            // check which teams button was clicked and update the score in the UI
+            // We do it this way, so we dont have to make a database call again to get the new score
+//            if(clickedButton == leftTeamPenalty) {
+//                int score = Integer.parseInt(leftSideScore.getText()) + 1;
+//                leftSideScore.setText(String.valueOf(score));
+//            }
+//            else if (clickedButton == rightTeamPenalty) {
+//                int score = Integer.parseInt(rightSideScore.getText()) + 1;
+//                rightSideScore.setText(String.valueOf(score));
+//            }
+//            else {
+//                return;
+//            }
+            matchEvent = new MatchEvent("Rødt kort", time, team_id.getName());
             liveEvents.add(matchEvent);
             updateUI();
         }
