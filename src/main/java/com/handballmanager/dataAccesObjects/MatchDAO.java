@@ -15,6 +15,8 @@ public class MatchDAO {
 
     private static final String INSERT = "INSERT INTO Match (team_1_id, team_2_id, match_length, start_time, end_time, status) VALUES (?,?,?,?,?,?)";
     private static final String DELETE = "DELETE FROM Match WHERE id = ?";
+    private static final String UPDATE_START_MATCH = "UPDATE Match set start_time = ?, status = ? WHERE id = ?";
+    private static final String UPDATE_END_MATCH = "UPDATE Match set end_time = ?, status = ? WHERE id = ?";
     private static final String UPDATE = "UPDATE Match SET (team_1_id, team_2_id, start_time, end_time, status) = (?,?,?,?,?) WHERE id = ?";
     private static final String SELECT_ALL =
             "SELECT m.id, m.start_time, m.end_time, m.status, t1.id AS team1_id, t1.name AS team1_name, t2.id AS team2_id, t2.name AS team2_name" +
@@ -46,9 +48,40 @@ public class MatchDAO {
         }
     }
 
+    public void startMatch(MatchModel match) {
+        // Try with resource, this is a safe way to use statements, as it auto closes after it is done
+        // Syntax is: try() {}
+        // this syntax returns the id of the created row, we need to decide if we need that
+        try (PreparedStatement stmt = DBConnect.UNIQUE_CONNECT.getConnection().prepareStatement(UPDATE_START_MATCH)) {
+            stmt.setTimestamp(1, Timestamp.valueOf(LocalDateTime.now()));
+            stmt.setString(2, MatchStatus.RUNNING.name());
+            stmt.setInt(3, match.getId());
+            stmt.executeUpdate();
+        }
+        catch (SQLException e) {
+            UIErrorReport.showDatabaseError(e);
+            throw new RuntimeException("Failed to start match", e);
+        }
+    }
+
+    public void endMatch(MatchModel match) {
+        // Try with resource, this is a safe way to use statements, as it auto closes after it is done
+        // Syntax is: try() {}
+        // this syntax returns the id of the created row, we need to decide if we need that
+        try (PreparedStatement stmt = DBConnect.UNIQUE_CONNECT.getConnection().prepareStatement(UPDATE_END_MATCH)) {
+            stmt.setTimestamp(1, Timestamp.valueOf(LocalDateTime.now()));
+            stmt.setString(2, MatchStatus.FINISHED.name());
+            stmt.setInt(3, match.getId());
+            stmt.executeUpdate();
+        }
+        catch (SQLException e) {
+            UIErrorReport.showDatabaseError(e);
+            throw new RuntimeException("Failed to end match", e);
+        }
+    }
+
     public List<MatchModel> selectAll() {
         List<MatchModel> matches = new ArrayList<>();
-
 
         try(PreparedStatement stmt = DBConnect.UNIQUE_CONNECT.getConnection().prepareStatement(SELECT_ALL);
             ResultSet result = stmt.executeQuery();

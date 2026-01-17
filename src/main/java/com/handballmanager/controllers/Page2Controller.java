@@ -99,13 +99,13 @@ public class Page2Controller {
 
             System.out.println("Ok done");
 
-             // To do: hvad skal der ske ved OK
+             // If all is okay run this code
             MatchDAO matchDAO = new MatchDAO();
             MatchModel match = new MatchModel(teamA, teamB, null, null, MatchStatus.NOT_STARTED);
             matchDAO.create(match);
             mainController.focusLiveMatchTab(match);
          });
-         // Vis vores Dialog
+         // show our Dialog
          dialog.showAndWait();
     }
 

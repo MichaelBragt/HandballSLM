@@ -50,7 +50,7 @@ public abstract class UIErrorReport {
             showAlert(
                     "Invalid data",
                     "Constraint violation",
-                    "The data you entered already exists or is invalid."
+                    "Data eksisterer allerede eller kan ikke opdateres\nPga. data constraint violations"
             );
         }
         else {
@@ -62,14 +62,14 @@ public abstract class UIErrorReport {
         }
     }
 
-    private static void showAlert(String title, String header, String content) {
+    public static void showAlert(String title, String header, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
         alert.setHeaderText(header);
         alert.setContentText(content);
         alert.showAndWait();
 
-        Platform.exit(); // clean JavaFX shutdown
+//        Platform.exit(); // clean JavaFX shutdown
     }
 
 

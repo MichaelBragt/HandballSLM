@@ -41,6 +41,35 @@ public class TeamDAO {
         }
     }
 
+    /**
+     * method to update Team name in database
+     * @param team
+     */
+    public void update(TeamModel team) {
+        // Try with resource, this is a safe way to use statements, as it auto closes after it is done
+        // Syntax is: try() {}
+        // this syntax returns the id of the created row, we need to decide if we need that
+        try (PreparedStatement stmt = DBConnect.UNIQUE_CONNECT.getConnection().prepareStatement(UPDATE, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setString(1, team.getName());
+            stmt.setInt(2, team.getId());
+            stmt.executeUpdate();
+            try (ResultSet keys = stmt.getGeneratedKeys()) {
+                if (keys.next()) {
+                    team.setId(keys.getInt(1));
+                }
+            }
+        }
+        catch (SQLException e) {
+            UIErrorReport.showDatabaseError(e);
+            throw new RuntimeException("Failed to update team", e);
+        }
+    }
+
+    /**
+     * method for deleting Team in database
+     * @param team
+     * @return
+     */
     public boolean delete(TeamModel team) {
         // Try with resource, this is a safe way to use statements, as it auto closes after it is done
         // Syntax is: try() {}
@@ -56,6 +85,10 @@ public class TeamDAO {
         }
     }
 
+    /**
+     * method for fetching all Teams from database
+     * @return
+     */
     public List<TeamModel> selectAll() {
         List<TeamModel> teams = new ArrayList<>();
 
