@@ -11,7 +11,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -19,7 +18,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 public class MatchPageController {
     @FXML public TableView<MatchEvent> liveMatchTable;
@@ -177,7 +175,7 @@ public class MatchPageController {
             // create an instance of the timer
             timer = new MatchTimeManager();
             // set up the listener so we gets notified on timer value change
-            timer.setListener(remaining ->
+            timer.setTickListener(remaining ->
                     // Run the counter.setText on the Java UI thread when possible
                     Platform.runLater(() ->
                             counter.setText(Long.toString(remaining))

@@ -1,9 +1,5 @@
 package com.handballmanager;
 
-import java.time.*;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -11,7 +7,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class MatchTimeManager {
 
-    private TimeListener listener;
+    private TimeListener tickListener;
     private Runnable finishedCallback;
 
     // Trådsikker executioner i java
@@ -31,8 +27,8 @@ public class MatchTimeManager {
         scheuduleCountdown.scheduleAtFixedRate(() -> {
             // check if pause boolean set, if it is we skip the scheudule runner
             if(pauseCountdown) {
-                // notify listener selvom vi er paused for at sikre værdien kan skrives i UI
-                notifyListener(remainingGameTime.get());
+                // notify tickListener selvom vi er paused for at sikre værdien kan skrives i UI
+                notifyTickListener(remainingGameTime.get());
                 return;
             }
 
@@ -42,13 +38,13 @@ public class MatchTimeManager {
             // check value has reached 0 and if so stop the scheuduler and notify value 0
             if(value <= 0) {
                 remainingGameTime.set(0);
-                notifyListener(0);
+                notifyTickListener(0);
                 notifyFinished();
                 stop();
                 return;
             }
-            // notify the listener of the value
-            notifyListener(value);
+            // notify the tickListener of the value
+            notifyTickListener(value);
         }, 0, 1, TimeUnit.SECONDS); // 0 delay, 1 køres hvor ofte?, enhed (sekunder)
     }
 
@@ -71,13 +67,13 @@ public class MatchTimeManager {
         return pauseCountdown;
     }
 
-    public void setListener(TimeListener listener) {
-        this.listener = listener;
+    public void setTickListener(TimeListener tickListener) {
+        this.tickListener = tickListener;
     }
 
-    private void notifyListener(long remaining) {
-        if(listener != null) {
-            listener.onTimeChange(remaining);
+    private void notifyTickListener(long remaining) {
+        if(tickListener != null) {
+            tickListener.onTimeChange(remaining);
         }
     }
 
