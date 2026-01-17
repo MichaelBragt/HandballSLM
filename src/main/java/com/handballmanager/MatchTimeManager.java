@@ -12,11 +12,12 @@ import java.util.concurrent.atomic.AtomicLong;
 public class MatchTimeManager {
 
     private TimeListener listener;
+    private Runnable finishedCallback;
 
     // Trådsikker executioner i java
-    private static final ScheduledExecutorService scheuduleCountdown = Executors.newSingleThreadScheduledExecutor();
+    private final ScheduledExecutorService scheuduleCountdown = Executors.newSingleThreadScheduledExecutor();
 
-    // AtomicLong  er et trådsikkert tal wrapped so Java selv sørger for alle tråede har
+    // AtomicLong er et trådsikkert tal wrapped so Java selv sørger for alle tråede har
     // nyeste værdi
     private final AtomicLong remainingGameTime = new AtomicLong();
     private volatile boolean pauseCountdown = false;
@@ -42,7 +43,7 @@ public class MatchTimeManager {
             if(value <= 0) {
                 remainingGameTime.set(0);
                 notifyListener(0);
-                setPause(true);
+                notifyFinished();
                 stop();
                 return;
             }
@@ -80,9 +81,14 @@ public class MatchTimeManager {
         }
     }
 
-    public static void shutdownAll() {
-        scheuduleCountdown.shutdownNow();
+    public void setFinishedCallback(Runnable finishedCallback) {
+        this.finishedCallback = finishedCallback;
     }
 
+   private void notifyFinished() {
+        if(finishedCallback != null) {
+            finishedCallback.run();
+        }
+   }
 }
 

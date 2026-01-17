@@ -32,8 +32,4 @@ public class HandballApp extends Application {
 
     }
 
-    @Override
-    public void stop() {
-        MatchTimeManager.shutdownAll();
-    }
 }

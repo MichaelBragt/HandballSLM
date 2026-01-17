@@ -5,6 +5,7 @@ import com.handballmanager.dataAccesObjects.GoalDAO;
 import com.handballmanager.dataAccesObjects.MatchDAO;
 import com.handballmanager.dataAccesObjects.PenaltyDAO;
 import com.handballmanager.models.*;
+import com.handballmanager.utils.UIErrorReport;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -31,7 +32,6 @@ public class MatchPageController {
     @FXML public VBox topLeftBox;
     @FXML public VBox topMidBox;
     @FXML public VBox topRightBox;
-//    @FXML public VBox rootBox;
     @FXML public BorderPane rootBox;
     @FXML public Text leftSideTeam;
     @FXML public Text rightSideTeam;
@@ -43,19 +43,37 @@ public class MatchPageController {
     @FXML public Button leftTeamPenalty;
     @FXML public Button rightTeamGoal;
     @FXML public Button rightTeamPenalty;
+
     private MatchModel match;
+    private final MatchDAO matchDB = new MatchDAO();
     private MatchEvent matchEvent;
     private final ObservableList<MatchEvent> liveEvents = FXCollections.observableArrayList();
-
     private MatchTimeManager timer;
 
     public void setMatch(MatchModel match) {
-        this.match = match;
-        timerButton.setText("Start Kamp");
-        counter.setText("60");
+        // here we set up the initial match IF timer is null
+        // we clear the events from former match and set both scores to zero
+        // set the button text and counter text to initial values
+        if(timer == null) {
+            this.match = match;
+            liveEvents.clear();
+            leftSideScore.setText("0");
+            rightSideScore.setText("0");
+            timerButton.setText("Start Kamp");
+            timerButton.setDisable(false);
+            counter.setText("60");
+        }
+        // if timer is NOT null a match is already running, and we inform the user of this
+        else {
+            UIErrorReport.showAlert("Kamp igang", "Kamp allerede i gang", "Der er allerede en kamp igang\nVent på den er færdig før\ndu sætter en ny i gang.");
+        }
+        // update the UI
         updateUI();
     }
 
+    /**
+     * method to decide if UI update is for running match or no active match
+     */
     private void updateUI() {
         if(match == null) {
             showNoMatch();
@@ -65,6 +83,9 @@ public class MatchPageController {
         }
     }
 
+    /**
+     * JavaFX's initialize method that runsa once the controller is loaded
+     */
     public void initialize() {
 
         liveMatchTable.setColumnResizePolicy(
@@ -82,6 +103,7 @@ public class MatchPageController {
             data.getValue().eventTeamProperty()
         );
 
+        // we want our top box to have equal width for the 3 inner boxes, we do that here
         topLeftBox.prefWidthProperty().bind(rootBox.widthProperty().divide(3));
         topMidBox.prefWidthProperty().bind(rootBox.widthProperty().divide(3));
         topRightBox.prefWidthProperty().bind(rootBox.widthProperty().divide(3));
@@ -95,6 +117,8 @@ public class MatchPageController {
         actions.setMaxWidth(40);
         actions.setPrefWidth(40);
 
+        // we haven't a specific onject for our actions column
+        // so we create our own cell to show our trashcan icon
         actions.setCellFactory(col -> new TableCell<>() {
             @Override
             protected void updateItem(Void item, boolean empty) {
@@ -117,6 +141,10 @@ public class MatchPageController {
 
         rootBox.setCenter(noMatchText);
         noMatchText.setStyle("-fx-font-size: 40px;");
+        leftTeamGoal.setDisable(true);
+        rightTeamGoal.setDisable(true);
+        leftTeamPenalty.setDisable(true);
+        rightTeamPenalty.setDisable(true);
     }
 
     /**
@@ -135,35 +163,66 @@ public class MatchPageController {
     }
 
     /**
-     * method to star/stop and resume a match (the timer)
-     * and also set text on butoon according to what it should say
+     * method to start/stop and resume a match (the timer)
+     * and also set text on buttons according to match state
      * @param event
      */
     public void timerClicked(ActionEvent event) {
 
         // if timer is not yet set, we set it
+        // REMEMBER: This code block is setting up the timer on first click SO
+        // after it has set up the 2 listeners, they DO NOT need the button to be clicked again
+        // They are running in the background as listeners for tick every second
         if(timer == null) {
+            // create an instance of the timer
             timer = new MatchTimeManager();
+            // set up the listener so we gets notified on timer value change
             timer.setListener(remaining ->
                     // Run the counter.setText on the Java UI thread when possible
                     Platform.runLater(() ->
                             counter.setText(Long.toString(remaining))
                     )
-            );
-            timer.setPause(true);
-            timer.startGameTimer(1);
-        }
 
-        // if timer is paused (true)
-        // we set pause to false and update button text
-        if(timer.getPause()) {
-            timer.setPause(false);
-            timerButton.setText("Pause Kamp");
+            );
+            // set up the second listener that is fired when timer hits zero
+            timer.setFinishedCallback(() -> {
+                        Platform.runLater(this::resetForNewMatch);
+                        matchDB.endMatch(match);
+                    }
+            );
+
+            // we set the timer to 1 minute and let it run and change button text
+            timer.startGameTimer(1);
+            leftTeamGoal.setDisable(false);
+            rightTeamGoal.setDisable(false);
+            leftTeamPenalty.setDisable(false);
+            rightTeamPenalty.setDisable(false);
+            timerButton.setText("Pause kamp");
+
+            // we set the start_time and status in the database
+            matchDB.startMatch(match);
+
         }
-        // else it is NOT paused and we set pause to true and update button text
+        // else if timer is running we handle pause and resume checks and buttons
         else {
-            timer.setPause(true);
-            timerButton.setText("Forsæt Kamp");
+            // if timer is paused (true)
+            // we set pause to false and update button text
+            if (timer.getPause()) {
+                timer.setPause(false);
+                timerButton.setText("Pause Kamp");
+                leftTeamGoal.setDisable(false);
+                rightTeamGoal.setDisable(false);
+                leftTeamPenalty.setDisable(false);
+                rightTeamPenalty.setDisable(false);
+
+            }
+            // else it is NOT paused, and we set pause to true and update button text
+            else {
+                timer.setPause(true);
+                timerButton.setText("Forsæt Kamp");
+                leftTeamGoal.setDisable(true);
+                rightTeamGoal.setDisable(true);
+            }
         }
     }
 
@@ -258,19 +317,6 @@ public class MatchPageController {
             // insert goal in database
             penaltyDAO.create(penalty);
 
-            // check which teams button was clicked and update the score in the UI
-            // We do it this way, so we dont have to make a database call again to get the new score
-//            if(clickedButton == leftTeamPenalty) {
-//                int score = Integer.parseInt(leftSideScore.getText()) + 1;
-//                leftSideScore.setText(String.valueOf(score));
-//            }
-//            else if (clickedButton == rightTeamPenalty) {
-//                int score = Integer.parseInt(rightSideScore.getText()) + 1;
-//                rightSideScore.setText(String.valueOf(score));
-//            }
-//            else {
-//                return;
-//            }
             matchEvent = new MatchEvent("Rødt kort", time, team_id.getName());
             liveEvents.add(matchEvent);
             updateUI();
@@ -278,5 +324,19 @@ public class MatchPageController {
         catch (RuntimeException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * method to call on match end to set state for various things
+     */
+    private void resetForNewMatch() {
+        timerButton.setText("Kamp Slut");
+        timerButton.setDisable(true);
+        leftTeamGoal.setDisable(true);
+        rightTeamGoal.setDisable(true);
+        leftTeamPenalty.setDisable(true);
+        rightTeamPenalty.setDisable(true);
+        timer = null;
+        match = null;
     }
 }

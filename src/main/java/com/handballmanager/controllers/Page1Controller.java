@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
@@ -31,6 +32,8 @@ public class Page1Controller {
     private StackPane contentBox;
 
     public void initialize() {
+        teamTable.setEditable(true);
+        nameColumn.setEditable(true);
         loadTeams();
 
         actions.setCellFactory(col -> new TableCell<>() {
@@ -59,7 +62,6 @@ public class Page1Controller {
         actions.setMinWidth(40);
         actions.setMaxWidth(40);
         actions.setPrefWidth(40);
-
     }
 
     /**
@@ -104,16 +106,31 @@ public class Page1Controller {
 
 
     private void loadTeams() {
-        TeamDAO teamDAO = new TeamDAO();
-        ObservableList<TeamModel> teams = FXCollections.observableList(teamDAO.selectAll());
+
+        ObservableList<TeamModel> teams = FXCollections.observableList(teamDB.selectAll());
 
         // This line is Java reflection, tries in order: nameProperty(), getName(), isName()
         // nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
         // this uses the getter directly
         nameColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
+
+        // we use JavaFx build in functionality to edit the value in a cell so we can handle changing a teams name
+        nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        // event to handle what to do on change commit
+        nameColumn.setOnEditCommit(e -> {
+            // we wrap it in a try/catch so nothing changes if we have errors
+            try {
+                TeamModel team = e.getRowValue(); // get and insert into model
+                team.setName(e.getNewValue()); // set the new value
+                teamDB.update(team); // call the database update
+            }
+            catch (RuntimeException ex) {
+                ex.printStackTrace();
+            }
+        });
+
         statColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-//        actions.setCellFactory();
         teamTable.setItems(teams);
     }
 }
