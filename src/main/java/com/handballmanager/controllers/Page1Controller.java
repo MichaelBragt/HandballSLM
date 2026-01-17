@@ -38,7 +38,12 @@ public class Page1Controller {
             {
                 setAlignment(Pos.CENTER);
                 deleteBtn.setOnAction(e -> {
+                    // This line gets back the exact TeamModel instance that is in the specific row
+                    // Because a TableView is a direct representation of the observable list being used
+                    // to populate it so we can do this getTableView().getItems().get(getIndex());
+                    // to get back the exact object and therefore be sure which object (row) we work on
                     TeamModel team = getTableView().getItems().get(getIndex());
+                    // we try call delet and if succes full, we also remove it from TableView in UI
                     if(teamDB.delete(team)) {
                         getTableView().getItems().remove(team);
                     }
