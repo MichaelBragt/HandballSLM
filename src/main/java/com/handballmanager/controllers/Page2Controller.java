@@ -10,27 +10,47 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 
+import javax.imageio.IIOException;
+import java.io.IOException;
+
 public class Page2Controller {
 
-    public TableView<MatchModel> matchTable;
-    public TableColumn<MatchModel, String> teamAColumn;
-    public TableColumn<MatchModel, String> scoreBoardColumn;
-    public TableColumn<MatchModel, String> teamBColumn;
-    public Label counter;
-    public VBox vBoxContent;
+    @FXML public TableView<MatchModel> matchTable;
+    @FXML public TableColumn<MatchModel, String> teamAColumn;
+    @FXML public TableColumn<MatchModel, String> scoreBoardColumn;
+    @FXML public TableColumn<MatchModel, String> teamBColumn;
+    @FXML public Label counter;
+    @FXML public VBox vBoxContent;
 
-    @FXML public MainController mainController;
+    public MainController mainController;
 
     public Button newMatchButton;
 
     public void initialize() {
 
+
         loadMatches();
+
+        // We set a mouse event listener to listen for doubleclick
+        // on the table rows, and load the report for the match
+        matchTable.setRowFactory(tv -> {
+            TableRow<MatchModel> row = new TableRow<>();
+
+            row.setOnMouseClicked( event -> {
+                if(event.getClickCount() == 2 && !row.isEmpty()) {
+                    mainController.loadPage2Report(row.getItem());
+                }
+            });
+
+            return row;
+        });
     }
 
     public void onTabSelected() {

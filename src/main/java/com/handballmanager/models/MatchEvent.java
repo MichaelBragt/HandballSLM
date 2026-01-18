@@ -30,8 +30,8 @@ public class MatchEvent {
         return eventTime;
     }
 
-    public StringProperty getEventTeam() {
-        return eventTeam;
+    public String getEventTeam() {
+        return eventTeam.get();
     }
 
     public StringProperty eventTeamProperty() {
