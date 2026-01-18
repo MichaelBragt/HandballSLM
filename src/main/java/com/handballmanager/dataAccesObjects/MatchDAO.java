@@ -64,11 +64,11 @@ public class MatchDAO {
         }
     }
 
-    public void endMatch(MatchModel match) {
+    public void endMatch(Connection conn, MatchModel match) {
         // Try with resource, this is a safe way to use statements, as it auto closes after it is done
         // Syntax is: try() {}
         // this syntax returns the id of the created row, we need to decide if we need that
-        try (PreparedStatement stmt = DBConnect.UNIQUE_CONNECT.getConnection().prepareStatement(UPDATE_END_MATCH)) {
+        try (PreparedStatement stmt = conn.prepareStatement(UPDATE_END_MATCH)) {
             stmt.setTimestamp(1, Timestamp.valueOf(LocalDateTime.now()));
             stmt.setString(2, MatchStatus.FINISHED.name());
             stmt.setInt(3, match.getId());
@@ -100,9 +100,7 @@ public class MatchDAO {
                         endTs == null ? null : endTs.toLocalDateTime(),
                         status
                 ));
-
             }
-
         }
         catch (SQLException e) {
             UIErrorReport.showDatabaseError(e);

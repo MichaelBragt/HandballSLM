@@ -153,13 +153,13 @@ GO
 
 
 /* ============================================================
-   TABLE: Liga
+   TABLE: League
    Purpose: Stillingen i ligaen (1 liga)
    ============================================================ */
 BEGIN TRY
     BEGIN TRANSACTION;
 
-    CREATE TABLE Liga (
+    CREATE TABLE League (
         league_id INT NOT NULL,
         team_id INT NOT NULL,
 
@@ -170,9 +170,9 @@ BEGIN TRY
         losses INT NOT NULL DEFAULT 0,
         draws INT NOT NULL DEFAULT 0,
 
-        CONSTRAINT PK_Liga PRIMARY KEY (team_id),
+        CONSTRAINT PK_League PRIMARY KEY (team_id),
 
-        CONSTRAINT FK_Liga_Team
+        CONSTRAINT FK_League_Team
             FOREIGN KEY (team_id) REFERENCES Team(id)
     );
 

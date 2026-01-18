@@ -1,6 +1,5 @@
 package com.handballmanager.controllers;
 
-import com.handballmanager.MatchTimeManager;
 import com.handballmanager.models.MatchModel;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,35 +11,87 @@ import java.io.IOException;
 
 public class MainController {
 
-    @FXML public TabPane mainTabPane;
+    @FXML private TabPane mainTabPane;
     @FXML private Tab liveMatchTab;
-    @FXML private Tab teamsTab;
-    public Tab matchesTab;
+    @FXML private Tab page1Tab;
+    @FXML private Tab page2Tab;
+    @FXML private Tab page3Tab;
 
-    private Parent page1View;
     private Page1Controller page1Controller;
-    private MatchPageController matchPageController;
-
-    // We need to inject the MainController into Page2Controller to get access to method
-    // focusLiveMatchTab, so this naming comes from
-    // <fx:include source="page2.fxml" fx:id="LiveMatchView" /> in main.fxml
-    // hard rule in Java, when you include an fxml file Controller gets added to the fx:id
-    // so LiveMatchView becomes LiveMatchViewController
-    // that way we can do LiveMatchViewController.setMainController(this)
-    // so Page2Controller has an instance of MainController
-    @FXML private Page2Controller LiveMatchViewController;
+    private Page2Controller page2Controller;
+    private Page3Controller page3Controller;
+    private MatchPageController liveMatchPageController;
 
 
-    public void initialize() throws IOException {
-        // We pass MainController to Page2Controller
-        LiveMatchViewController.setMainController(this);
+    /**
+     * JavaFX initialize method that runds one time when controller is loaded
+     */
+    public void initialize() {
 
-        // We create a view that fetches match.fxml and gets the controller
-        // and set the content of the liveMatchTab (id in main.fxml) to be this matchPage.fxml we load
-        FXMLLoader matchLoader = new FXMLLoader(getClass().getResource("/com/handballmanager/matchPage.fxml"));
-        Parent view = matchLoader.load();
-        matchPageController = matchLoader.getController();
-        liveMatchTab.setContent(view);
+        loadTabPage2();
+        loadTabPage3();
+        loadLiveMatchTab();
+
+    }
+
+    /**
+     * Method to tab page 2
+     */
+    private void loadTabPage2() {
+
+        try {
+            FXMLLoader page2Loader = new FXMLLoader(getClass().getResource("/com/handballmanager/page2.fxml"));
+            Parent page2View = page2Loader.load();
+            page2Controller = page2Loader.getController();
+            page2Tab.setContent(page2View);
+
+            // We need to inject a reference to the MainController into Page2Controller to get access to method
+            // focusLiveMatchTab
+            page2Controller.setMainController(this);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        page2Tab.setOnSelectionChanged(e -> {
+            if(page2Tab.isSelected()) {
+                page2Controller.onTabSelected();
+            }
+        });
+    }
+
+    /**
+     * Method to tab page 3
+     */
+    private void loadTabPage3() {
+
+        try {
+            FXMLLoader page3Loader = new FXMLLoader(getClass().getResource("/com/handballmanager/page3.fxml"));
+            Parent page3View = page3Loader.load();
+            page3Controller = page3Loader.getController();
+            page3Tab.setContent(page3View);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Method to load live match page
+     */
+    private void loadLiveMatchTab() {
+
+        try {
+            // We create a liveMatchPageview that fetches match.fxml and gets the controller
+            // and set the content of the liveMatchTab (id in main.fxml) to be this matchPage.fxml we load
+            FXMLLoader matchLoader = new FXMLLoader(getClass().getResource("/com/handballmanager/matchPage.fxml"));
+            Parent liveMatchPageview = matchLoader.load();
+            liveMatchPageController = matchLoader.getController();
+            liveMatchTab.setContent(liveMatchPageview);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -49,7 +100,7 @@ public class MainController {
      * @param match
      */
     public void focusLiveMatchTab(MatchModel match) {
-        matchPageController.setMatch(match);
+        liveMatchPageController.setMatch(match);
         mainTabPane.getSelectionModel().select(liveMatchTab);
     }
 }

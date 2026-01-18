@@ -4,10 +4,7 @@ import com.handballmanager.DBConnect;
 import com.handballmanager.models.TeamModel;
 import com.handballmanager.utils.UIErrorReport;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +24,32 @@ public class TeamDAO {
         // Syntax is: try() {}
         // this syntax returns the id of the created row, we need to decide if we need that
         try (PreparedStatement stmt = DBConnect.UNIQUE_CONNECT.getConnection().prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setString(1, team.getName());
+            stmt.executeUpdate();
+            try (ResultSet keys = stmt.getGeneratedKeys()) {
+                if (keys.next()) {
+                    team.setId(keys.getInt(1));
+                }
+            }
+        }
+        catch (SQLException e) {
+            UIErrorReport.showDatabaseError(e);
+            throw new RuntimeException("Failed to create team", e);
+        }
+    }
+
+    /**
+     * method to create team with connection parameter
+     * we need this to be able to rollback create team with league in
+     * service layers, they need the same connection to be able to rollback on errors
+     * @param conn
+     * @param team
+     */
+    public void createWithConn(Connection conn, TeamModel team) {
+        // Try with resource, this is a safe way to use statements, as it auto closes after it is done
+        // Syntax is: try() {}
+        // this syntax returns the id of the created row, we need to decide if we need that
+        try (PreparedStatement stmt = conn.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, team.getName());
             stmt.executeUpdate();
             try (ResultSet keys = stmt.getGeneratedKeys()) {
