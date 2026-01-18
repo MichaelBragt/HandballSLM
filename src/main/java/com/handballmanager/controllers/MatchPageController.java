@@ -5,6 +5,7 @@ import com.handballmanager.dataAccesObjects.GoalDAO;
 import com.handballmanager.dataAccesObjects.MatchDAO;
 import com.handballmanager.dataAccesObjects.PenaltyDAO;
 import com.handballmanager.models.*;
+import com.handballmanager.services.MatchEndService;
 import com.handballmanager.utils.UIErrorReport;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -184,8 +185,9 @@ public class MatchPageController {
             );
             // set up the second listener that is fired when timer hits zero
             timer.setFinishedCallback(() -> {
+                        MatchEndService endService = new MatchEndService();
+                        endService.endMatchCleanUp(match, match.getTeam1().getId(), match.getTeam2().getId(), Integer.parseInt(leftSideScore.getText()), Integer.parseInt(rightSideScore.getText()));
                         Platform.runLater(this::resetForNewMatch);
-                        matchDB.endMatch(match);
                     }
             );
 

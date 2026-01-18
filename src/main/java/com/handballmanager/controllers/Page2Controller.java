@@ -29,6 +29,11 @@ public class Page2Controller {
     public Button newMatchButton;
 
     public void initialize() {
+
+        loadMatches();
+    }
+
+    public void onTabSelected() {
         loadMatches();
     }
 

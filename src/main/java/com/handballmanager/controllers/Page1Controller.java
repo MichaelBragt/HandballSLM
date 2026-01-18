@@ -3,6 +3,7 @@ package com.handballmanager.controllers;
 import com.handballmanager.MatchTimeManager;
 import com.handballmanager.dataAccesObjects.TeamDAO;
 import com.handballmanager.models.TeamModel;
+import com.handballmanager.services.CreateTeamWithLeagueService;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -97,9 +98,11 @@ public class Page1Controller {
 
         // Vis dialogboksen og check om der er en return værdi (skriv i terminal)
         dialog.showAndWait().ifPresent(name -> {
-            System.out.println("Opretter hold: " + name);
-            TeamModel teamModel = new TeamModel(name);
-            teamDB.create(teamModel);
+            CreateTeamWithLeagueService createTeam = new CreateTeamWithLeagueService();
+            createTeam.createTeamWithLeague(name);
+//            System.out.println("Opretter hold: " + name);
+//            TeamModel teamModel = new TeamModel(name);
+//            teamDB.create(teamModel);
             loadTeams();
         });
     }
