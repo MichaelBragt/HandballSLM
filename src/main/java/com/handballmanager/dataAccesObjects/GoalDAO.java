@@ -2,11 +2,15 @@ package com.handballmanager.dataAccesObjects;
 
 import com.handballmanager.DBConnect;
 import com.handballmanager.models.GoalModel;
+import com.handballmanager.models.MatchEvent;
+import com.handballmanager.models.MatchModel;
 import com.handballmanager.models.TeamModel;
 import com.handballmanager.utils.UIErrorReport;
 
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GoalDAO {
 
@@ -16,9 +20,32 @@ public class GoalDAO {
 //    private int goal_time;
 
     private static final String SELECT = "";
-    private static final String SELECT_ALL = "";
+    private static final String SELECT_GOALS_FROM_MATCH = "SELECT g.time, t.name AS team_name FROM Goals g JOIN Team t ON t.id = g.team_id WHERE g.match_id = ?";
     private static final String INSERT = "INSERT INTO Goals (match_id, team_id, time, goal_time) VALUES (?,?,?,?) ";
     private static final String SELECT_ALL_FROM_TEAM = "";
+
+    public List<MatchEvent> getGoalsFromMatch(int match_id) {
+        List<MatchEvent> matchGoals = new ArrayList<>();
+
+        try(
+            PreparedStatement stmt = DBConnect.UNIQUE_CONNECT.getConnection().prepareStatement(SELECT_GOALS_FROM_MATCH);
+
+            ) {
+                stmt.setInt(1, match_id);
+                ResultSet result = stmt.executeQuery();
+                while(result.next()) {
+                    matchGoals.add(new MatchEvent(
+                            "Mål",
+                            result.getLong("time"),
+                            result.getString("team_name")
+                    ));
+                }
+            }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return matchGoals;
+    }
 
     public void create(GoalModel goal) {
         // Try with resource, this is a safe way to use statements, as it auto closes after it is done
@@ -40,6 +67,7 @@ public class GoalDAO {
             UIErrorReport.showDatabaseError(e);
             throw new RuntimeException("Failed to create goal", e);
         }
+
     }
 
 }

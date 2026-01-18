@@ -22,7 +22,7 @@
         <!-- Left side-->
         <VBox fx:id="topLeftBox" alignment="TOP_CENTER">
             <Text fx:id="leftSideTeam" textAlignment="CENTER" styleClass="teamNames" />
-            <Text fx:id="leftSideScore" textAlignment="CENTER" styleClass="teamScores" text="0" />
+            <Text fx:id="leftSideScore" textAlignment="CENTER" styleClass="teamScores label-score" text="0" />
             <Region VBox.vgrow="ALWAYS" />
             <HBox alignment="BOTTOM_CENTER" spacing="10">
                 <Button fx:id="leftTeamGoal" onAction="#goal_scored" text="Mål" />
@@ -39,7 +39,7 @@
         <!-- Right side-->
         <VBox fx:id="topRightBox" alignment="TOP_CENTER">
             <Text fx:id="rightSideTeam" text="Right Side" textAlignment="CENTER" styleClass="teamNames" />
-            <Text fx:id="rightSideScore" textAlignment="CENTER" styleClass="teamScores" text="0" />
+            <Text fx:id="rightSideScore" textAlignment="CENTER" styleClass="teamScores label-score" text="0" />
             <Region VBox.vgrow="ALWAYS" />
             <HBox spacing="10" alignment="BOTTOM_CENTER">
                 <Button fx:id="rightTeamGoal" text="Mål" onAction="#goal_scored" />

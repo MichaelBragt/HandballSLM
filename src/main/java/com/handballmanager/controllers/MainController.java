@@ -6,11 +6,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 
 public class MainController {
 
+    public AnchorPane root;
     @FXML private TabPane mainTabPane;
     @FXML private Tab liveMatchTab;
     @FXML private Tab page1Tab;
@@ -21,6 +23,7 @@ public class MainController {
     private Page2Controller page2Controller;
     private Page3Controller page3Controller;
     private MatchPageController liveMatchPageController;
+    private MatchReportController matchReportController;
 
 
     /**
@@ -34,10 +37,11 @@ public class MainController {
 
     }
 
+
     /**
-     * Method to tab page 2
+     * Method to load tab page 2
      */
-    private void loadTabPage2() {
+    protected void loadTabPage2() {
 
         try {
             FXMLLoader page2Loader = new FXMLLoader(getClass().getResource("/com/handballmanager/page2.fxml"));
@@ -59,6 +63,25 @@ public class MainController {
             }
         });
     }
+
+    public void loadPage2Report(MatchModel match) {
+        try {
+            FXMLLoader reportLoader = new FXMLLoader(
+                    getClass().getResource("/com/handballmanager/matchReport.fxml")
+            );
+            Parent reportView = reportLoader.load();
+
+            matchReportController = reportLoader.getController();
+            matchReportController.setMatch(match);
+            matchReportController.setMainController(this);
+
+            page2Tab.setContent(reportView);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * Method to tab page 3

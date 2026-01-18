@@ -52,6 +52,7 @@ public class Page1Controller {
                         getTableView().getItems().remove(team);
                     }
                 });
+                deleteBtn.getStyleClass().add("icon-button");
             }
 
             @Override

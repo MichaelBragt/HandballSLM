@@ -116,6 +116,12 @@ public class MatchPageController {
         actions.setMaxWidth(40);
         actions.setPrefWidth(40);
 
+        leftTeamGoal.getStyleClass().add("goal-button");
+        leftTeamPenalty.getStyleClass().add("red-card-button");
+        rightTeamGoal.getStyleClass().add("goal-button");
+        rightTeamPenalty.getStyleClass().add("red-card-button");
+//        leftSideScore.getStyleClass().add("label-score");
+
         // we haven't a specific onject for our actions column
         // so we create our own cell to show our trashcan icon
         actions.setCellFactory(col -> new TableCell<>() {
