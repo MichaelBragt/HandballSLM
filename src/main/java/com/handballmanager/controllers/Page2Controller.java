@@ -6,6 +6,7 @@ import com.handballmanager.models.MatchModel;
 import com.handballmanager.models.MatchStatus;
 import com.handballmanager.models.TeamModel;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -126,7 +127,7 @@ public class Page2Controller {
 
              // If all is okay run this code
             MatchDAO matchDAO = new MatchDAO();
-            MatchModel match = new MatchModel(teamA, teamB, null, null, MatchStatus.NOT_STARTED);
+            MatchModel match = new MatchModel(teamA, teamB, null, null, MatchStatus.NOT_STARTED, 0, 0);
             matchDAO.create(match);
             mainController.focusLiveMatchTab(match);
          });
@@ -144,7 +145,14 @@ public class Page2Controller {
         // this uses the getter directly
 //        teamAColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
         teamAColumn.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(data.getValue().getTeam1().getName()));
-        scoreBoardColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+
+        scoreBoardColumn.setCellValueFactory(data -> {
+            MatchModel match = data.getValue();
+            String score = match.getTeam1Goals() + " - " + match.getTeam2Goals();
+            return  new ReadOnlyStringWrapper(score);
+        });
+
+//        scoreBoardColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         teamBColumn.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(data.getValue().getTeam2().getName()));
 //        actions.setCellFactory();
         matchTable.setItems(matches);

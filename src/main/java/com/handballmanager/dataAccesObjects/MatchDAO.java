@@ -19,10 +19,14 @@ public class MatchDAO {
     private static final String UPDATE_END_MATCH = "UPDATE Match set end_time = ?, status = ? WHERE id = ?";
     private static final String UPDATE = "UPDATE Match SET (team_1_id, team_2_id, start_time, end_time, status) = (?,?,?,?,?) WHERE id = ?";
     private static final String SELECT_ALL =
-            "SELECT m.id, m.start_time, m.end_time, m.status, t1.id AS team1_id, t1.name AS team1_name, t2.id AS team2_id, t2.name AS team2_name" +
-            " FROM Match m" +
-            " JOIN Team t1 ON m.team_1_id = t1.id" +
-            " JOIN Team t2 ON m.team_2_id = t2.id";
+            "SELECT m.id, m.start_time, m.end_time, m.status, t1.id AS team1_id, t1.name AS team1_name, t2.id AS team2_id, t2.name AS team2_name, " +
+                    "SUM(CASE WHEN g.team_id = t1.id THEN 1 ELSE 0 END) AS team1_goals, " +
+                    "SUM(CASE WHEN g.team_id = t2.id THEN 1 ELSE 0 END) AS team2_goals " +
+                    "FROM Match m " +
+                    "JOIN Team t1 ON m.team_1_id = t1.id " +
+                    "JOIN Team t2 ON m.team_2_id = t2.id " +
+                    "LEFT JOIN Goals g ON g.match_id = m.id " +
+                    "GROUP BY m.id, m.start_time, m.end_time, m.status, t1.id, t1.name, t2.id, t2.name;";
 
     public void create(MatchModel match) {
         // Try with resource, this is a safe way to use statements, as it auto closes after it is done
@@ -98,7 +102,9 @@ public class MatchDAO {
                         new TeamModel(result.getString("team2_name")),
                         startTs == null ? null : startTs.toLocalDateTime(),
                         endTs == null ? null : endTs.toLocalDateTime(),
-                        status
+                        status,
+                        result.getInt("team1_goals"),
+                        result.getInt("team2_goals")
                 ));
             }
         }

@@ -10,22 +10,28 @@ public class MatchModel {
     private LocalDateTime start_time;
     private LocalDateTime end_time;
     private MatchStatus status;
+    private int team1Goals;
+    private int team2Goals;
 
-    public MatchModel(TeamModel team1, TeamModel team2, LocalDateTime start_time, LocalDateTime end_time, MatchStatus status) {
+    public MatchModel(TeamModel team1, TeamModel team2, LocalDateTime start_time, LocalDateTime end_time, MatchStatus status, int team1Goals, int team2Goals) {
         this.team1 = team1;
         this.team2 = team2;
         this.start_time = start_time;
         this.end_time = end_time;
         this.status = status;
+        this.team1Goals = team1Goals;
+        this.team2Goals = team2Goals;
     }
 
-    public MatchModel(int id, TeamModel team1, TeamModel team2, LocalDateTime start_time, LocalDateTime end_time, MatchStatus status) {
+    public MatchModel(int id, TeamModel team1, TeamModel team2, LocalDateTime start_time, LocalDateTime end_time, MatchStatus status, int team1Goals, int team2Goals) {
         this.id = id;
         this.team1 = team1;
         this.team2 = team2;
         this.start_time = start_time;
         this.end_time = end_time;
         this.status = status;
+        this.team1Goals = team1Goals;
+        this.team2Goals = team2Goals;
     }
 
     public int getId() {
@@ -72,5 +78,21 @@ public class MatchModel {
 
     public void setStatus(MatchStatus status) {
         this.status = status;
+    }
+
+    public int getTeam1Goals() {
+        return team1Goals;
+    }
+
+    public void setTeam1Goals(int team1Goals) {
+        this.team1Goals = team1Goals;
+    }
+
+    public int getTeam2Goals() {
+        return team2Goals;
+    }
+
+    public void setTeam2Goals(int team2Goals) {
+        this.team2Goals = team2Goals;
     }
 }

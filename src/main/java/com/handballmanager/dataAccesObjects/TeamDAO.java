@@ -11,9 +11,12 @@ import java.util.List;
 public class TeamDAO {
 
     private static final String INSERT = "INSERT INTO Team (name) VALUES (?)";
-    private static final String DELETE = "DELETE FROM Team WHERE id = ?";
+
+    //Since teams can have goals, penalties, matches we do a soft delete when user deletes a team
+    // so we set active to 0
+    private static final String DELETE = "UPDATE Team SET active = 0 WHERE id = ?";
     private static final String UPDATE = "UPDATE Team SET name = ? WHERE id = ?";
-    private static final String SELECT_ALL = "SELECT * FROM Team";
+    private static final String SELECT_ALL = "SELECT * FROM Team WHERE active = 1";
 
     /**
      * Method for creating Team in database
@@ -96,7 +99,6 @@ public class TeamDAO {
     public boolean delete(TeamModel team) {
         // Try with resource, this is a safe way to use statements, as it auto closes after it is done
         // Syntax is: try() {}
-        // this syntax returns the id of the created row, we need to decide if we need that
         try (PreparedStatement stmt = DBConnect.UNIQUE_CONNECT.getConnection().prepareStatement(DELETE)) {
             stmt.setInt(1, team.getId());
             int rows = stmt.executeUpdate();

@@ -1,9 +1,8 @@
-/*
+
 VBox, HBox, StackPane, BorderPane {
     -fx-border-color: rgba(255,0,0,0.6);
     -fx-border-width: 1;
 }
-*/
 
 
 .teamNames {
@@ -17,7 +16,6 @@ VBox, HBox, StackPane, BorderPane {
     -fx-font-family: "Monospaced";
 }
 
-
 .match-timer {
     -fx-font-size: 48px;
     -fx-font-weight: 800;
@@ -25,18 +23,15 @@ VBox, HBox, StackPane, BorderPane {
     -fx-text-fill: #111;
 
     /* Circle sizing */
-
     -fx-min-width: 88px;
     -fx-min-height: 88px;
     -fx-max-width: 88px;
     -fx-max-height: 88px;
 
     /* Circle border */
-
     -fx-border-color: #ccc;
     -fx-border-width: 3;
     -fx-border-radius: 44px;
     -fx-background-radius: 44px;
-
     -fx-alignment: center;
 }

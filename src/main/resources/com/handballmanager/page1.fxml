@@ -22,7 +22,7 @@
        <TableView fx:id="teamTable" VBox.vgrow="ALWAYS">
          <columns>
            <TableColumn fx:id="nameColumn" text="Hold Navn" />
-           <TableColumn fx:id="statColumn" text="Vundet - Tabt - Lige" />
+<!--           <TableColumn fx:id="statColumn" text="Vundet - Tabt - Lige" />-->
            <TableColumn fx:id="actions" />
          </columns>
           <columnResizePolicy>
