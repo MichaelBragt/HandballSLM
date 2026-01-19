@@ -8,10 +8,13 @@ import com.handballmanager.models.*;
 import com.handballmanager.services.MatchEndService;
 import com.handballmanager.utils.UIErrorReport;
 import javafx.application.Platform;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -25,7 +28,7 @@ public class MatchPageController {
     @FXML public TableColumn<MatchEvent, String> eventDetail;
     @FXML public TableColumn<MatchEvent, Number> eventTime;
     @FXML public TableColumn<MatchEvent, String> eventTeam;
-    @FXML public TableColumn<MatchModel, Void> actions;
+    @FXML public TableColumn<MatchEvent, Void> actions;
     @FXML public Label counter;
     @FXML public HBox topBox;
     @FXML public VBox topLeftBox;
@@ -45,6 +48,8 @@ public class MatchPageController {
 
     private MatchModel match;
     private final MatchDAO matchDB = new MatchDAO();
+    private final GoalDAO goalDAO = new GoalDAO();
+    private final PenaltyDAO penaltyDAO = new PenaltyDAO();
     private MatchEvent matchEvent;
     private final ObservableList<MatchEvent> liveEvents = FXCollections.observableArrayList();
     private MatchTimeManager timer;
@@ -92,15 +97,10 @@ public class MatchPageController {
         );
 
         liveMatchTable.setItems(liveEvents);
-        eventDetail.setCellValueFactory(data ->
-            data.getValue().eventTypeProperty()
-        );
-        eventTime.setCellValueFactory(data ->
-            data.getValue().eventTimeProperty()
-        );
-        eventTeam.setCellValueFactory(data ->
-            data.getValue().eventTeamProperty()
-        );
+
+        eventDetail.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEventType()));
+        eventTime.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(data.getValue().getEventTime()));
+        eventTeam.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEventTeam()));
 
         // we want our top box to have equal width for the 3 inner boxes, we do that here
         topLeftBox.prefWidthProperty().bind(rootBox.widthProperty().divide(3));
@@ -120,17 +120,55 @@ public class MatchPageController {
         leftTeamPenalty.getStyleClass().add("red-card-button");
         rightTeamGoal.getStyleClass().add("goal-button");
         rightTeamPenalty.getStyleClass().add("red-card-button");
-//        leftSideScore.getStyleClass().add("label-score");
 
-        // we haven't a specific onject for our actions column
-        // so we create our own cell to show our trashcan icon
         actions.setCellFactory(col -> new TableCell<>() {
+            private final Button deleteBtn = new Button("🗑");
+
+            {
+                setAlignment(Pos.CENTER);
+                deleteBtn.setOnAction(e -> {
+
+                    MatchEvent event = getTableRow().getItem();
+
+                    if(event.getEventType().equalsIgnoreCase("Mål")) {
+                        try {
+                            goalDAO.delete(event.getEventId());
+                            if(event.getEventTeam().equalsIgnoreCase(leftSideTeam.getText())) {
+                                int score = Integer.parseInt(leftSideScore.getText()) - 1;
+                                leftSideScore.setText(score + "");
+                            }
+                            else {
+                                int score = Integer.parseInt(rightSideScore.getText()) - 1;
+                                rightSideScore.setText(score + "");
+                            }
+                        }
+                        catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                    else if(event.getEventType().equalsIgnoreCase("Rødt Kort")) {
+                        try {
+                            penaltyDAO.delete(event.getEventId());
+                        }
+                        catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                    liveEvents.remove(event);
+                    updateUI();
+                });
+            }
+
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
-                setText(empty ? null : "test");
+                setGraphic(empty ? null : deleteBtn);
             }
         });
+        actions.setMinWidth(40);
+        actions.setMaxWidth(40);
+        actions.setPrefWidth(40);
+
         updateUI();
     }
 
@@ -279,7 +317,7 @@ public class MatchPageController {
             else {
                 return;
             }
-            matchEvent = new MatchEvent("Mål", time, team_id.getName());
+            matchEvent = new MatchEvent(goal.getId(), "Mål", time, team_id.getName());
             liveEvents.add(matchEvent);
             updateUI();
         }
@@ -323,7 +361,7 @@ public class MatchPageController {
             // insert goal in database
             penaltyDAO.create(penalty);
 
-            matchEvent = new MatchEvent("Rødt kort", time, team_id.getName());
+            matchEvent = new MatchEvent(penalty.getId(), "Rødt kort", time, team_id.getName());
             liveEvents.add(matchEvent);
             updateUI();
         }
