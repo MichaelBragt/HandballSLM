@@ -21,6 +21,10 @@ public class GoalModel {
         this.id = id;
     }
 
+    public int getId() {
+        return id;
+    }
+
     public int getMatch_id() {
         return match_id;
     }

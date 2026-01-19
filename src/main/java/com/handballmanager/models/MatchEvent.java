@@ -4,37 +4,35 @@ import javafx.beans.property.*;
 
 public class MatchEvent {
 
-    private final StringProperty eventType = new SimpleStringProperty();
-    private final LongProperty eventTime = new SimpleLongProperty();
-    private final StringProperty eventTeam = new SimpleStringProperty();
+    private final int eventId;
+    private final String eventType;
+    private final long eventTime;
+    private final String eventTeam;
 
-    public MatchEvent(String eventType, long eventTime, String eventTeam) {
-        this.eventType.set(eventType);
-        this.eventTime.set(eventTime);
-        this.eventTeam.set(eventTeam);
+    public MatchEvent(int eventId, String eventType, long eventTime, String eventTeam) {
+        this.eventId = eventId;
+        this.eventType = eventType;
+        this.eventTime = eventTime;
+        this.eventTeam = eventTeam;
+    }
+
+    public int getEventId() {
+        return eventId;
     }
 
     public String getEventType() {
-        return eventType.get();
-    }
-
-    public StringProperty eventTypeProperty() {
         return eventType;
     }
 
     public long getEventTime() {
-        return eventTime.get();
-    }
-
-    public LongProperty eventTimeProperty() {
         return eventTime;
     }
 
     public String getEventTeam() {
-        return eventTeam.get();
-    }
-
-    public StringProperty eventTeamProperty() {
         return eventTeam;
     }
+
+
+
+
 }

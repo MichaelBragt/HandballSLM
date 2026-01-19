@@ -19,10 +19,24 @@ public class GoalDAO {
 //    private LocalDateTime time;
 //    private int goal_time;
 
-    private static final String SELECT = "";
-    private static final String SELECT_GOALS_FROM_MATCH = "SELECT g.time, t.name AS team_name FROM Goals g JOIN Team t ON t.id = g.team_id WHERE g.match_id = ?";
+    private static final String DELETE = "DELETE FROM Goals WHERE id = ?";
+    private static final String SELECT_GOALS_FROM_MATCH = "SELECT g.id, g.time, t.name AS team_name FROM Goals g JOIN Team t ON t.id = g.team_id WHERE g.match_id = ?";
     private static final String INSERT = "INSERT INTO Goals (match_id, team_id, time, goal_time) VALUES (?,?,?,?) ";
     private static final String SELECT_ALL_FROM_TEAM = "";
+
+    public void delete(int goal_id) {
+
+        try(
+                PreparedStatement stmt = DBConnect.UNIQUE_CONNECT.getConnection().prepareStatement(DELETE)
+        ) {
+            stmt.setInt(1, goal_id);
+            stmt.executeUpdate();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     public List<MatchEvent> getGoalsFromMatch(int match_id) {
         List<MatchEvent> matchGoals = new ArrayList<>();
@@ -35,6 +49,7 @@ public class GoalDAO {
                 ResultSet result = stmt.executeQuery();
                 while(result.next()) {
                     matchGoals.add(new MatchEvent(
+                            result.getInt("id"),
                             "Mål",
                             result.getLong("time"),
                             result.getString("team_name")

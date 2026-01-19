@@ -17,6 +17,10 @@ public class PenaltyModel {
         this.penalty_time = penalty_time;
     }
 
+    public int getId() {
+        return id;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
