@@ -66,30 +66,51 @@ GO
 
 
 /* ============================================================
-   INSERT GOALS (realistic uneven scores)
+   INSERT GOALS (handball-realistic, min 20 goals per match)
    ============================================================ */
+
 DECLARE @matchId INT = 1;
 
 WHILE @matchId <= 20
 BEGIN
-    DECLARE @g1 INT = 14 + ABS(CHECKSUM(NEWID())) % 8;  -- 14–21
-    DECLARE @g2 INT = 12 + ABS(CHECKSUM(NEWID())) % 8;  -- 12–19
+    /* Total goals per match: 20–60 */
+    DECLARE @totalGoals INT = 20 + ABS(CHECKSUM(NEWID())) % 41;
 
+    /* Split goals between teams */
+    DECLARE @team1Goals INT = @totalGoals / 2
+                              + (ABS(CHECKSUM(NEWID())) % 5) - 2;
+
+    /* Safety clamp */
+    IF @team1Goals < 5 SET @team1Goals = 5;
+    IF @team1Goals > @totalGoals - 5 SET @team1Goals = @totalGoals - 5;
+
+    DECLARE @team2Goals INT = @totalGoals - @team1Goals;
+
+    /* Insert goals for team 1 */
     INSERT INTO Goals (match_id, team_id, time, goal_time)
-    SELECT m.id, m.team_1_id, rn * 2, GETDATE()
+    SELECT
+        m.id,
+        m.team_1_id,
+        rn * 2,
+        DATEADD(SECOND, rn * 15, GETDATE())
     FROM Match m
     CROSS JOIN (
-        SELECT TOP (@g1)
+        SELECT TOP (@team1Goals)
             ROW_NUMBER() OVER (ORDER BY NEWID()) AS rn
         FROM sys.objects
     ) g
     WHERE m.id = @matchId;
 
+    /* Insert goals for team 2 */
     INSERT INTO Goals (match_id, team_id, time, goal_time)
-    SELECT m.id, m.team_2_id, rn * 2, GETDATE()
+    SELECT
+        m.id,
+        m.team_2_id,
+        rn * 2,
+        DATEADD(SECOND, rn * 15, GETDATE())
     FROM Match m
     CROSS JOIN (
-        SELECT TOP (@g2)
+        SELECT TOP (@team2Goals)
             ROW_NUMBER() OVER (ORDER BY NEWID()) AS rn
         FROM sys.objects
     ) g
@@ -98,6 +119,7 @@ BEGIN
     SET @matchId += 1;
 END;
 GO
+
 
 
 /* ============================================================

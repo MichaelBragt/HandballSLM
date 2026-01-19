@@ -20,7 +20,7 @@ public class Page1Controller {
 
     public TableView<TeamModel> teamTable;
     public TableColumn<TeamModel, String> nameColumn;
-    public TableColumn<TeamModel, String> statColumn;
+//    public TableColumn<TeamModel, String> statColumn;
     public TableColumn<TeamModel, Void> actions;
 
     TeamDAO teamDB = new TeamDAO();
@@ -52,7 +52,6 @@ public class Page1Controller {
                         getTableView().getItems().remove(team);
                     }
                 });
-                deleteBtn.getStyleClass().add("icon-button");
             }
 
             @Override
@@ -134,7 +133,7 @@ public class Page1Controller {
             }
         });
 
-        statColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+//        statColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         teamTable.setItems(teams);
     }
 }
