@@ -1,7 +1,5 @@
 package com.handballmanager.models;
 
-import javafx.beans.property.*;
-
 public class MatchEvent {
 
     private final int eventId;

@@ -14,16 +14,14 @@ import java.util.List;
 
 public class GoalDAO {
 
-//    private int match_id;
-//    private int team_id;
-//    private LocalDateTime time;
-//    private int goal_time;
-
     private static final String DELETE = "DELETE FROM Goals WHERE id = ?";
     private static final String SELECT_GOALS_FROM_MATCH = "SELECT g.id, g.time, t.name AS team_name FROM Goals g JOIN Team t ON t.id = g.team_id WHERE g.match_id = ?";
     private static final String INSERT = "INSERT INTO Goals (match_id, team_id, time, goal_time) VALUES (?,?,?,?) ";
-    private static final String SELECT_ALL_FROM_TEAM = "";
 
+    /**
+     * method to delete a goal in DB
+     * @param goal_id
+     */
     public void delete(int goal_id) {
 
         try(
@@ -38,6 +36,11 @@ public class GoalDAO {
 
     }
 
+    /**
+     * method to get all goals from a specific match
+     * @param match_id
+     * @return
+     */
     public List<MatchEvent> getGoalsFromMatch(int match_id) {
         List<MatchEvent> matchGoals = new ArrayList<>();
 
@@ -62,10 +65,16 @@ public class GoalDAO {
         return matchGoals;
     }
 
+    /**
+     * method to create a goal in DB
+     * @param goal
+     */
     public void create(GoalModel goal) {
         // Try with resource, this is a safe way to use statements, as it auto closes after it is done
         // Syntax is: try() {}
         // this syntax returns the id of the created row, we need to decide if we need that
+        // here we actually DO NOT use a return value
+        // but instead sets the id in the model
         try (PreparedStatement stmt = DBConnect.UNIQUE_CONNECT.getConnection().prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setInt(1, goal.getMatch_id());
             stmt.setInt(2, goal.getTeam_id());

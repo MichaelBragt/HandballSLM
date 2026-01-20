@@ -15,10 +15,16 @@ public class CreateTeamWithLeagueService {
     private int league_id = 1;
 
 
+    /**
+     * Service methos to create a team and right after create a row for that team in the league
+     * @param name
+     */
     public void createTeamWithLeague(String name) {
 
         Connection conn = DBConnect.UNIQUE_CONNECT.getConnection();
 
+        // We need rollback features since we work on 2 tables
+        // so we set autocommit to fals
         try {
             conn.setAutoCommit(false);
 
@@ -28,9 +34,11 @@ public class CreateTeamWithLeagueService {
             LeagueModel league = new LeagueModel(team.getId(), league_id);
             leagueDAO.createWithConn(conn, league);
 
+            // after both our db calls has run with succes we commit
             conn.commit();
         }
         catch (Exception e) {
+            // if there were errors we roll back
             try {
                 conn.rollback();
             }
@@ -39,6 +47,8 @@ public class CreateTeamWithLeagueService {
             }
             throw new RuntimeException("Failed to create team with league spot", e);
         }
+        // and just in case we set our connection to autocommit again
+        // IF we use it anywhere else, which we should not. But better safe than sorry :-)
         finally {
             try {
                 conn.setAutoCommit(true);

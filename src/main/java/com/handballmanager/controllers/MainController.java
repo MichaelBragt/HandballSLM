@@ -28,6 +28,8 @@ public class MainController {
 
     /**
      * JavaFX initialize method that runds one time when controller is loaded
+     * here we call our load tabs methods
+     * tabPage1 is included via <fx:include source="page1.fxml" /> in the FXML file
      */
     public void initialize() {
 
@@ -37,12 +39,13 @@ public class MainController {
 
     }
 
-
     /**
      * Method to load tab page 2
      */
     protected void loadTabPage2() {
 
+        // Here wer set up loading the page 2 controller
+        // Parent loads the root Node on page 2, and then we set the content of this tab to page2 content
         try {
             FXMLLoader page2Loader = new FXMLLoader(getClass().getResource("/com/handballmanager/page2.fxml"));
             Parent page2View = page2Loader.load();
@@ -57,6 +60,9 @@ public class MainController {
             e.printStackTrace();
         }
 
+        // This checks if tab2 is selected and call onTabSelected when we select Tab 2
+        // In page2 controller this method loads the table, so we are sure to get a fresh loaded tabel
+        // when we select the tab
         page2Tab.setOnSelectionChanged(e -> {
             if(page2Tab.isSelected()) {
                 page2Controller.onTabSelected();
@@ -64,6 +70,12 @@ public class MainController {
         });
     }
 
+    /**
+     * Method to set up and load our MatchReport Controller and set
+     * page2Tab to it's content
+     * We use this to show a match report when we doubleclick a match
+     * @param match
+     */
     public void loadPage2Report(MatchModel match) {
         try {
             FXMLLoader reportLoader = new FXMLLoader(

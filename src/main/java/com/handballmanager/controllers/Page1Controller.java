@@ -20,18 +20,18 @@ public class Page1Controller {
 
     public TableView<TeamModel> teamTable;
     public TableColumn<TeamModel, String> nameColumn;
-//    public TableColumn<TeamModel, String> statColumn;
     public TableColumn<TeamModel, Void> actions;
+    @FXML public VBox vBoxContent;
 
     TeamDAO teamDB = new TeamDAO();
 
-    @FXML
-    public Label counter;
-    public VBox vBoxContent;
-
-    @FXML
-    private StackPane contentBox;
-
+    /**
+     * JavaFX initialize
+     * Here we set up some stuff
+     * we set the name column and the table to be editable so we can change team name directly in the cell
+     * we also create our own table cell for our delete button and load our teams into the table with
+     * our loadTeams() method call
+     */
     public void initialize() {
         teamTable.setEditable(true);
         nameColumn.setEditable(true);
@@ -66,29 +66,30 @@ public class Page1Controller {
     }
 
     /**
-     * Simpel DIALOG til popup vindue til hold oprettelse
+     * method to create our popup Dialog to create teams
      */
     public void createTeam() {
 
-        // ny Dialog og set title
+        // new Dialog and set title
         Dialog<String> dialog = new Dialog<>();
         dialog.setTitle("Opret Hold");
 
-        // lav en opret hold knap i dialog boksen (ok knap)
+        // create a "create" button
         ButtonType opretBtn = new ButtonType("Opret", ButtonBar.ButtonData.OK_DONE);
-        //add knappen + en cancel knap
+        // add the button and a cancel button to the Dialog
         dialog.getDialogPane().getButtonTypes().addAll(opretBtn, ButtonType.CANCEL);
 
-        // Lav et tesktfelt med prompt title
+        // create a text field and a prompt text
         TextField holdNavn = new TextField();
         holdNavn.setPromptText("Holdnavn");
 
-        // sæt indhold af dialog boksen
+        // add it to the Dialog
         dialog.getDialogPane().setContent(
                 new VBox(10, new Label("Holdnavn:"), holdNavn)
         );
 
-        // HVIS Ok klikkes converter return værdien til en string
+        // IF OK is pressed convert the return value to a string
+        // else return zero
         dialog.setResultConverter(button -> {
             if(button == opretBtn) {
                 return holdNavn.getText();
@@ -96,24 +97,26 @@ public class Page1Controller {
             return null;
         });
 
-        // Vis dialogboksen og check om der er en return værdi (skriv i terminal)
+        // This is the actual call to show the Dialog window, we show and wait
+        // and check if name (if there is a return value) is set
+        // and if so we call the create team service
         dialog.showAndWait().ifPresent(name -> {
             CreateTeamWithLeagueService createTeam = new CreateTeamWithLeagueService();
             createTeam.createTeamWithLeague(name);
-//            System.out.println("Opretter hold: " + name);
-//            TeamModel teamModel = new TeamModel(name);
-//            teamDB.create(teamModel);
             loadTeams();
         });
     }
 
-
+    /**
+     * method to load our teams and apply them to our tableview
+     */
     private void loadTeams() {
 
         ObservableList<TeamModel> teams = FXCollections.observableList(teamDB.selectAll());
 
         // This line is Java reflection, tries in order: nameProperty(), getName(), isName()
         // nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        // We decided to go with the direct getter structure
 
         // this uses the getter directly
         nameColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
@@ -133,7 +136,7 @@ public class Page1Controller {
             }
         });
 
-//        statColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        // we add the teams to our teamTable tableView
         teamTable.setItems(teams);
     }
 }

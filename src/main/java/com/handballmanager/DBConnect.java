@@ -8,8 +8,17 @@ import java.sql.SQLException;
 
 public enum DBConnect {
 
+    /**
+     * Our ENUM can only have this ONE constant
+     * Therefore this makes out ENUM into singleton
+     * database connection, so we are sure we always only have this one connection
+     */
     UNIQUE_CONNECT;
 
+    /**
+     * WE SHOULD make these as .env variables
+     * But that is for improvments
+     */
     private static final String DATABASE = "HandballApp";
     private static final String USER = "handballUser";
     private static final String PASSWORD = "test";
@@ -21,10 +30,12 @@ public enum DBConnect {
 
     private Connection connection;
 
+    /**
+     * connection is created when ENUM is used the first time at runtime
+     */
     DBConnect() {
         try {
             connection = DriverManager.getConnection(CONNECT_STRING, USER, PASSWORD);
-//            System.out.println("Database connected");
         }
         catch (SQLException e) {
             UIErrorReport.showDatabaseError(e);
@@ -32,6 +43,10 @@ public enum DBConnect {
         }
     }
 
+    /**
+     * method to get connection
+     * @return
+     */
     public Connection getConnection() {
         return connection;
     }

@@ -1,5 +1,8 @@
 package com.handballmanager.models;
 
+/**
+ * ENUM to have a match status that is consistent
+ */
 public enum MatchStatus {
 
     NOT_STARTED,

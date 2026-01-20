@@ -12,13 +12,14 @@ import java.util.List;
 
 public class PenaltyDAO {
 
-    private static final String SELECT = "";
-    private static final String SELECT_ALL = "";
     private static final String DELETE = "DELETE FROM Penalty WHERE id = ?";
     private static final String INSERT = "INSERT INTO Penalty (match_id, team_id, time, penalty_time) VALUES (?,?,?,?) ";
     private static final String SELECT_PENALTIES_FROM_MATCH = "SELECT p.id, p.time, t.name AS team_name FROM Penalty p JOIN Team t ON t.id = p.team_id WHERE p.match_id = ?";
-    private static final String SELECT_ALL_FROM_TEAM = "";
 
+    /**
+     * method to delete a penalty
+     * @param penalty_id
+     */
     public void delete(int penalty_id) {
 
         try(
@@ -30,9 +31,13 @@ public class PenaltyDAO {
         catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
+    /**
+     * method to get all penalties from a specific match
+     * @param match_id
+     * @return
+     */
     public List<MatchEvent> getPenaltiesFromMatch(int match_id) {
         List<MatchEvent> matchPenalties = new ArrayList<>();
 
@@ -56,6 +61,10 @@ public class PenaltyDAO {
         return matchPenalties;
     }
 
+    /**
+     * method to create a penalty
+     * @param penalty
+     */
     public void create(PenaltyModel penalty) {
         // Try with resource, this is a safe way to use statements, as it auto closes after it is done
         // Syntax is: try() {}
@@ -77,5 +86,4 @@ public class PenaltyDAO {
             throw new RuntimeException("Failed to create penalty", e);
         }
     }
-
 }

@@ -88,7 +88,7 @@ public class MatchPageController {
     }
 
     /**
-     * JavaFX's initialize method that runsa once the controller is loaded
+     * JavaFX's initialize method that runs ONE TIME when the controller is loaded
      */
     public void initialize() {
 
@@ -98,6 +98,8 @@ public class MatchPageController {
 
         liveMatchTable.setItems(liveEvents);
 
+        // we set which data each colums has with a CellValue factory
+        // each data value corresponds to a getter in the MatchEvent model
         eventDetail.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEventType()));
         eventTime.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(data.getValue().getEventTime()));
         eventTeam.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEventTeam()));
@@ -107,6 +109,7 @@ public class MatchPageController {
         topMidBox.prefWidthProperty().bind(rootBox.widthProperty().divide(3));
         topRightBox.prefWidthProperty().bind(rootBox.widthProperty().divide(3));
 
+        // set resizing policy
         eventDetail.setResizable(true);
         eventTime.setResizable(true);
         eventTeam.setResizable(true);
@@ -116,11 +119,19 @@ public class MatchPageController {
         actions.setMaxWidth(40);
         actions.setPrefWidth(40);
 
+        // we add some style classes to the goal and penalty buttons
         leftTeamGoal.getStyleClass().add("goal-button");
         leftTeamPenalty.getStyleClass().add("red-card-button");
         rightTeamGoal.getStyleClass().add("goal-button");
         rightTeamPenalty.getStyleClass().add("red-card-button");
 
+        /**
+         * Here we set a cell factory for our actions column, since we don't have data for it in our model
+         * we need to create our own cell content so we create a new table cell, this is for our delete button
+         * and since a row can be both a goal or a penalty, we need to do some checks to see WHAT type of event
+         * we are trying to delete before we can decide which delete method we need to call
+         * lastly we also remove it from the liveEvents list so it is removed from the UI
+         */
         actions.setCellFactory(col -> new TableCell<>() {
             private final Button deleteBtn = new Button("🗑");
 
@@ -128,11 +139,13 @@ public class MatchPageController {
                 setAlignment(Pos.CENTER);
                 deleteBtn.setOnAction(e -> {
 
+                    // get the event object from the row
                     MatchEvent event = getTableRow().getItem();
-
+                    // check if it's a goal and then do this
                     if(event.getEventType().equalsIgnoreCase("Mål")) {
                         try {
                             goalDAO.delete(event.getEventId());
+                            // We also need to decrement the score in the UI
                             if(event.getEventTeam().equalsIgnoreCase(leftSideTeam.getText())) {
                                 int score = Integer.parseInt(leftSideScore.getText()) - 1;
                                 leftSideScore.setText(score + "");
@@ -146,6 +159,7 @@ public class MatchPageController {
                             ex.printStackTrace();
                         }
                     }
+                    // else it must be Rødt Kort, then do this
                     else if(event.getEventType().equalsIgnoreCase("Rødt Kort")) {
                         try {
                             penaltyDAO.delete(event.getEventId());
@@ -159,6 +173,8 @@ public class MatchPageController {
                 });
             }
 
+            // Overriding method updateItem so we show deleteBtn
+            // in an actual row, overrides method in TableCell class
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
@@ -192,7 +208,6 @@ public class MatchPageController {
 
     /**
      * helper method to show UI elements on match running
-     * also we set our listener up for the game counter here
      */
     private void showActiveMatch() {
 
@@ -208,6 +223,8 @@ public class MatchPageController {
     /**
      * method to start/stop and resume a match (the timer)
      * and also set text on buttons according to match state
+     * the listener for the timer is also set up here on click
+     * when the timer is null for the first click to start the match
      * @param event
      */
     public void timerClicked(ActionEvent event) {
@@ -289,7 +306,7 @@ public class MatchPageController {
         else {
             return;
         }
-        // goal score time should be how long into the game is was scored
+        // goal score time should be how long into the game it was scored
         // so we set time to game length (60) - remaining time
         long time = 60 - timer.getRemainingGameTime();
         // goal time as DateTime object
@@ -327,7 +344,7 @@ public class MatchPageController {
     }
 
     /**
-     * method to update goal score in UI and database
+     * method to penalty in UI and database
      * @param event
      */
     public void penalty(ActionEvent event) {
@@ -345,17 +362,17 @@ public class MatchPageController {
         else {
             return;
         }
-        // goal score time should be how long into the game is was scored
+        // penalty time should be how long into the game it was
         // so we set time to game length (60) - remaining time
         long time = 60 - timer.getRemainingGameTime();
-        // goal time as DateTime object
+        // penalty time as DateTime object
         LocalDateTime goal_time = LocalDateTime.now();
-        // We create a Goal object with our data
+        // We create a Penalty object with our data
         PenaltyModel penalty = new PenaltyModel(match.getId(), team_id.getId(), time, goal_time);
-        // instantiate a GoalDAO object to make DB calls
+        // instantiate a PenaltyDAO object to make DB calls
         PenaltyDAO penaltyDAO = new PenaltyDAO();
 
-        // We wrap the Goal database call in a try/catch because we want to change the goal scoreboard
+        // We wrap the Penalty database call in a try/catch because we want to change
         // in the UI, but if writing to DB fails it should not do that
         try {
             // insert goal in database
