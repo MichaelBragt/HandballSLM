@@ -19,7 +19,7 @@
     <HBox>
         <Button text="Tilbage" fx:id="backButton" onAction="#goBack" alignment="BOTTOM_LEFT" />
     </HBox>
-    <HBox fx:id="topBox">
+    <HBox fx:id="topBox" styleClass="liveMatchTop">
         <!-- Left side-->
         <VBox fx:id="topLeftBox" alignment="TOP_CENTER">
             <Text fx:id="leftSideTeam" textAlignment="CENTER" styleClass="teamNames" />

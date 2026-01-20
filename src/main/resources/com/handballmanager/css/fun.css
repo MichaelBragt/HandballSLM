@@ -1,136 +1,47 @@
+/*
+VBox, HBox, StackPane, BorderPane {
+    -fx-border-color: rgba(255,0,0,0.6);
+    -fx-border-width: 1;
+}
+*/
+
+/*
+VBox, HBox, StackPane, BorderPane {
+    -fx-border-color: rgba(255,0,0,0.6);
+    -fx-border-width: 1;
+}
+*/
 
 
-/********************************************/
-/* =========================================================
-   ROOT / GLOBAL
-   ========================================================= */
-.root {
-    -fx-font-family: "Segoe UI", "Inter", "Arial";
-    -fx-background-color: linear-gradient(
-        to bottom right,
-        #050b16,
-        #0a1324
-    );
-    -fx-text-fill: #e6ecf3;
+.teamNames {
+    -fx-font-size: 24px;
 }
 
-/* =========================================================
-   LAYOUT CONTAINERS
-   ========================================================= */
-VBox, HBox {
-    -fx-spacing: 12;
+.teamScores {
+    -fx-font-size: 40px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #111;
+    -fx-font-family: "Monospaced";
 }
 
-VBox {
-    -fx-padding: 16;
-}
-
-HBox {
-    -fx-alignment: center;
-}
-
-/* Card-like containers */
-Pane, VBox, HBox {
-    -fx-background-radius: 16;
-}
-
-/* =========================================================
-   GLOBAL TEXT STYLING
-   ========================================================= */
-
-Label,
-Text,
-Button,
-TextField,
-TextArea,
-PasswordField,
-ComboBox,
-TableCell {
-    -fx-text-fill: #dfe7f1;
-    -fx-font-size: 14px;
-}
-
-/* Text node uses -fx-fill */
-Text {
-    -fx-fill: #dfe7f1;
-}
-
-
-/* =========================================================
-   HEADINGS & TEXT
-   ========================================================= */
-Label, text {
-    -fx-fill: #dfe7f1;
-    -fx-text-fill: #dfe7f1;
-    -fx-font-size: 14px;
-}
-
-.label-title {
-    -fx-font-size: 28px;
-    -fx-font-weight: bold;
-    -fx-text-fill: white;
-    -fx-fill: white;
-}
-
-.label-subtitle {
-    -fx-font-size: 13px;
-    -fx-text-fill: #8fa4c7;
-}
-
-.label-score {
-    -fx-font-size: 72px;
-    -fx-font-weight: bold;
-    -fx-text-fill: white;
-    -fx-fill: white;
-}
-
-.label-timer {
+.match-timer {
     -fx-font-size: 48px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #37b7ff;
-}
+    -fx-font-weight: 800;
+    -fx-font-family: "Monospaced";
+    -fx-text-fill: #111;
 
-/* =========================================================
-   BUTTONS – BASE STYLE
-   ========================================================= */
-Button {
-    -fx-background-radius: 12;
-    -fx-font-size: 14px;
-    -fx-font-weight: bold;
-    -fx-padding: 10 18;
-    -fx-cursor: hand;
-    -fx-background-color: #1c2a44;
-    -fx-text-fill: #e6ecf3;
-}
+    /* Circle sizing */
+    -fx-min-width: 88px;
+    -fx-min-height: 88px;
+    -fx-max-width: 88px;
+    -fx-max-height: 88px;
 
-Button:hover {
-    -fx-background-color: #243a5f;
-}
-
-Button:pressed {
-    -fx-background-color: #16233a;
-}
-
-/* =========================================================
-   BUTTON VARIANTS
-   ========================================================= */
-
-/* Primary (Start match, navigation) */
-.primary-button {
-    -fx-background-color: linear-gradient(
-        to right,
-        #2aa7ff,
-        #4cc3ff
-    );
-    -fx-text-fill: #04101f;
-}
-
-.primary-button:hover {
-    -fx-background-color: linear-gradient(
-        to right,
-        #3cb4ff,
-        #6ad0ff
-    );
+    /* Circle border */
+    -fx-border-color: #ccc;
+    -fx-border-width: 3;
+    -fx-border-radius: 44px;
+    -fx-background-radius: 44px;
+    -fx-alignment: center;
 }
 
 /* Goal button */
@@ -161,197 +72,350 @@ Button:pressed {
     -fx-background-color: #ff6b6b;
 }
 
-/* Icon-style button (reset, refresh) */
-.icon-button {
-    -fx-background-radius: 50;
-    -fx-padding: 10;
-    -fx-background-color: #1b2942;
-}
-
-/* =========================================================
-   TABLE VIEW
-   ========================================================= */
+/****/
+/* =========================
+   TABLEVIEW ROOT
+   ========================= */
 TableView {
-    -fx-background-color: transparent;
-    -fx-border-color: #1f2f4a;
-    -fx-border-radius: 14;
-    -fx-background-radius: 14;
+    -fx-background-color: white;
+    -fx-border-color: #cfcfcf;
+    -fx-border-width: 1;
+    -fx-padding: 0;
+    -fx-background-insets: 0;
 }
 
-.table-view .column-header-background {
+/* =========================
+   REMOVE INNER CONTAINERS
+   ========================= */
+
+TableView > .virtual-flow {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+TableView > .virtual-flow > .clipped-container {
+    -fx-padding: 0;
+}
+
+TableView > .virtual-flow > .clipped-container > .sheet {
+    -fx-padding: 0;
+}
+
+/* =========================
+   HEADER BACKGROUND
+   ========================= */
+TableView > .column-header-background {
     -fx-background-color: linear-gradient(
-        to right,
-        #0f1c33,
-        #142443
+        to bottom,
+        #2f2f2f,
+        #1f1f1f
     );
-    -fx-background-radius: 14 14 0 0;
+    -fx-border-color: #ff6b00;
+    -fx-border-width: 0 0 2 0;
+    -fx-padding: 0;
+    -fx-background-insets: 0;
 }
 
-.table-view .column-header {
+/* =========================
+   COLUMN HEADERS
+   ========================= */
+TableView .column-header {
     -fx-background-color: transparent;
+    -fx-padding: 8 8;
+    -fx-background-insets: 0;
 }
 
-.table-view .column-header .label {
-    -fx-text-fill: #9fb2d4;
+TableView .column-header Label {
+    -fx-text-fill: white;
     -fx-font-weight: bold;
-    -fx-font-size: 12px;
-}
-
-.table-row-cell {
-    -fx-background-color: transparent;
-}
-
-.table-row-cell:filled:hover {
-    -fx-background-color: #162741;
-}
-
-.table-row-cell:selected {
-    -fx-background-color: #1f3a5f;
-}
-
-.table-cell {
-    -fx-text-fill: #e6ecf3;
     -fx-font-size: 13px;
-    -fx-padding: 10;
 }
 
-/* =========================================================
-   TOGGLE BUTTONS (Halvleg selector)
-   ========================================================= */
-ToggleButton {
-    -fx-background-radius: 20;
-    -fx-padding: 6 16;
-    -fx-background-color: #1b2a45;
-    -fx-text-fill: #a9bddc;
-    -fx-font-weight: bold;
+/* =========================
+   ROWS (NO FLOATING)
+   ========================= */
+TableRow {
+    -fx-background-color: white;
+    -fx-padding: 0;
+    -fx-background-insets: 0;
+    -fx-border-color: transparent transparent #eeeeee transparent;
+    -fx-border-width: 0 0 1 0;
 }
 
-ToggleButton:selected {
-    -fx-background-color: #2aa7ff;
-    -fx-text-fill: #04101f;
-}
-
-/* =========================================================
-   SEPARATORS & BORDERS
-   ========================================================= */
-Separator {
-    -fx-background-color: #1f2f4a;
-}
-
-/* =========================================================
-   SCROLL BAR (TABLE / LIST)
-   ========================================================= */
-.scroll-bar {
-    -fx-background-color: transparent;
-}
-
-.scroll-bar .thumb {
-    -fx-background-color: #2a3d5f;
-    -fx-background-radius: 8;
-}
-
-/* =========================================================
-   TAB PANE – MENU STYLE
-   ========================================================= */
-
-TabPane {
-    -fx-background-color: transparent;
-}
-
-.tab-pane .tab-header-area {
-    -fx-padding: 8 16 12 16;
-    -fx-background-color: transparent;
-}
-
-.tab-pane .headers-region {
-    -fx-spacing: 10;
-}
-
-/* Remove default tab background junk */
-.tab-pane .tab-header-background {
-    -fx-background-color: transparent;
-}
-
-/* Individual tab */
-.tab-pane .tab {
-    -fx-background-radius: 16;
-    -fx-background-color: transparent;
-    -fx-padding: 8 18;
-}
-
-/* Tab label */
-.tab-pane .tab .tab-label {
-    -fx-text-fill: #9fb2d4;
-    -fx-font-size: 14px;
-    -fx-font-weight: bold;
+TableRow:odd {
+    -fx-background-color: #fafafa;
 }
 
 /* Hover */
-.tab-pane .tab:hover {
-    -fx-background-color: #1b2a45;
+TableRow:hover {
+    -fx-background-color: #fff1e6;
 }
 
-/* Selected tab */
-.tab-pane .tab:selected {
+/* Selected */
+TableRow:selected {
+    -fx-background-color: #ffd6b8;
+}
+
+/* =========================
+   CELLS (TIGHT)
+   ========================= */
+TableCell {
+    -fx-padding: 6 10;
+    -fx-background-insets: 0;
+    -fx-text-fill: #2b2b2b;
+    -fx-font-size: 12px;
+}
+
+/* =========================
+   BUTTONS IN CELLS
+   ========================= */
+TableCell Button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 4;
+    -fx-cursor: hand;
+}
+
+TableCell Button:hover {
+    -fx-background-color: #ffdddd;
+    -fx-background-radius: 3;
+}
+
+/* =========================
+   SCROLLBAR (FLUSH)
+   ========================= */
+ScrollBar {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+ScrollBar .thumb {
+    -fx-background-color: #c2c2c2;
+    -fx-background-radius: 3;
+}
+
+/* =========================
+   BASE BUTTON
+   ========================= */
+Button {
     -fx-background-color: linear-gradient(
-        to right,
-        #2aa7ff,
-        #4cc3ff
+        to bottom,
+        #3a3a3a,
+        #1f1f1f
+    );
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+
+    -fx-padding: 6 14;
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+/*
+    -fx-border-color: #ff6b00;
+    -fx-border-width: 1;
+    */
+
+    -fx-cursor: hand;
+}
+
+/* =========================
+   BUTTON HOVER
+   ========================= */
+Button:hover {
+    -fx-background-color: linear-gradient(
+        to bottom,
+        #ff7a18,
+        #ff6b00
+    );
+    -fx-text-fill: black;
+}
+
+/* =========================
+   BUTTON PRESSED
+   ========================= */
+Button:pressed {
+    -fx-background-color: #ff6b00;
+    -fx-text-fill: black;
+}
+
+/* =========================
+   DISABLED BUTTON
+   ========================= */
+Button:disabled {
+    -fx-opacity: 0.5;
+}
+
+/* =========================
+   ICON BUTTONS (TABLE)
+   ========================= */
+TableView Button {
+    -fx-padding: 4 6;
+    -fx-font-size: 11px;
+
+    -fx-background-color: #e6e6e6;
+    -fx-text-fill: black;
+
+    -fx-border-color: #c0c0c0;
+    -fx-border-width: 1;
+    -fx-background-radius: 3;
+    -fx-border-radius: 3;
+}
+
+/* Hover for table buttons */
+TableView Button:hover {
+    -fx-background-color: #ff6b00;
+    -fx-text-fill: black;
+    -fx-border-color: #ff6b00;
+}
+
+/* =========================
+   TABPANE ROOT
+   ========================= */
+TabPane {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+/* =========================
+   KILL SQUARE TAB BACKING
+   ========================= */
+TabPane .tab-container {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+    -fx-background-insets: 0;
+}
+
+/* Ensure no borders sneak in */
+TabPane .tab,
+TabPane .tab:selected,
+TabPane .tab:hover {
+    -fx-border-color: transparent;
+    -fx-background-insets: 0;
+}
+
+
+/* =========================
+   HEADER AREA (REMOVE BORDERS)
+   ========================= */
+TabPane > .tab-header-area {
+    -fx-padding: 8;
+    -fx-background-color: transparent;
+}
+
+/* REMOVE DEFAULT BACKGROUND / BORDER */
+TabPane > .tab-header-area > .tab-header-background {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+/* =========================
+   PILL CONTAINER
+   ========================= */
+TabPane > .tab-header-area > .headers-region {
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-background-radius: 16;
+    -fx-padding: 4;
+    -fx-border-color: transparent;   /* ← removes thin border */
+}
+
+/* =========================
+   TAB (INACTIVE)
+   ========================= */
+TabPane .tab {
+    -fx-background-color: transparent;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-padding: 8 8;
+}
+
+/* Text for inactive */
+TabPane .tab .tab-label {
+    -fx-text-fill: #b9c3d1;
+    -fx-font-size: 13px;
+    -fx-font-weight: 500;
+}
+
+/* =========================
+   HOVER (SUBTLE)
+   ========================= */
+TabPane .tab:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+}
+
+TabPane .tab:hover .tab-label {
+    -fx-text-fill: #e6ecf3;
+}
+
+/* =========================
+   ACTIVE TAB (SELECTED)
+   ========================= */
+TabPane .tab:selected {
+    -fx-background-color: linear-gradient(
+        to bottom,
+        #3cc2ff,
+        #1fa3e0
     );
 }
 
-.tab-pane .tab:selected .tab-label {
-    -fx-text-fill: #04101f;
+TabPane .tab:selected .tab-label {
+    -fx-text-fill: #0b1a2a;
+    -fx-font-weight: bold;
 }
 
-/* Remove focus ring */
-.tab-pane .tab:focused {
+/* =========================
+   REMOVE FOCUS RINGS
+   ========================= */
+TabPane .tab:focused {
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
 }
 
-/* =========================================================
-   TABLE VIEW – ALTERNATING ROW COLORS
-   ========================================================= */
-
-.table-row-cell:filled:even {
-    -fx-background-color: rgba(255, 255, 255, 0.015);
-}
-
-.table-row-cell:filled:odd {
-    -fx-background-color: rgba(255, 255, 255, 0.04);
-}
-
-/* Hover */
-.table-row-cell:filled:hover {
-    -fx-background-color: #162741;
-}
-
-/* Selected */
-.table-row-cell:selected {
-    -fx-background-color: #1f3a5f;
-}
-
-/* =========================================================
-   ICON BUTTON (TRASH, EDIT, ETC.)
-   ========================================================= */
-
-.icon-button {
+/* =========================
+   CONTENT AREA
+   ========================= */
+TabPane > .tab-content-area {
     -fx-background-color: transparent;
-    -fx-padding: 6;
-    -fx-background-radius: 8;
+    -fx-padding: 0;
 }
 
-.icon-button:hover {
-    -fx-background-color: #1b2a45;
+TabPane .tab,
+TabPane .tab-container,
+TabPane .tab-label {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-insets: 0;
+}
+/* =========================
+   REMOVE TAB FOCUS RING
+   ========================= */
+TabPane .tab {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
 }
 
-.icon-button:pressed {
-    -fx-background-color: #16233a;
+TabPane .tab:selected {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
 }
 
-/* If icon is a Label or glyph inside the button */
-.icon-button .label {
-    -fx-text-fill: #9fb2d4;
-    -fx-font-size: 14px;
+/* Kill focus indicator node explicitly */
+TabPane .tab .focus-indicator {
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
 }
+
+.liveMatchTop, .liveMatchTop * {
+    -fx-fill: white;
+    -fx-text-fill: white;
+}
+
+.root {
+    -fx-background-color: linear-gradient(
+            to bottom,
+            #1b2433,
+            #141c28
+        );
+}
+
+
