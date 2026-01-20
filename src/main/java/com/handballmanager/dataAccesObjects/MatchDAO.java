@@ -16,6 +16,8 @@ public class MatchDAO {
     private static final String INSERT = "INSERT INTO Match (team_1_id, team_2_id, match_length, start_time, end_time, status) VALUES (?,?,?,?,?,?)";
     private static final String UPDATE_START_MATCH = "UPDATE Match set start_time = ?, status = ? WHERE id = ?";
     private static final String UPDATE_END_MATCH = "UPDATE Match set end_time = ?, status = ? WHERE id = ?";
+    // We need GROUP_BY in our select_all statement because we use SUM to calculate goals
+    // sql needs to know how the rows should be grouped together
     private static final String SELECT_ALL =
             "SELECT m.id, m.start_time, m.end_time, m.status, t1.id AS team1_id, t1.name AS team1_name, t2.id AS team2_id, t2.name AS team2_name, " +
                     "SUM(CASE WHEN g.team_id = t1.id THEN 1 ELSE 0 END) AS team1_goals, " +
