@@ -16,8 +16,9 @@ public enum DBConnect {
     UNIQUE_CONNECT;
 
     /**
-     * WE SHOULD make these as .env variables
-     * But that is for improvments
+     * WE COULD make these as .env variables
+     * But that is for improvements
+     * But should ALWAYS be in a live environment
      */
     private static final String DATABASE = "HandballApp";
     private static final String USER = "handballUser";
