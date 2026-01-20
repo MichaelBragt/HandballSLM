@@ -18,7 +18,7 @@
     </padding>
     <!-- Top -->
     <top>
-    <HBox fx:id="topBox">
+    <HBox fx:id="topBox" styleClass="liveMatchTop">
         <BorderPane.margin>
             <Insets bottom="10" />
         </BorderPane.margin>
@@ -36,7 +36,11 @@
         <VBox fx:id="topMidBox">
             <VBox alignment="CENTER">
                 <Label fx:id="counter" styleClass="match-timer" />
-                <Button fx:id="timerButton" visible="false" managed="false" onAction="#timerClicked" />
+                <Button fx:id="timerButton" visible="false" managed="false" onAction="#timerClicked">
+                    <VBox.margin>
+                        <Insets top="8"/>
+                    </VBox.margin>
+                </Button>
             </VBox>
         </VBox>
         <!-- Right side-->
@@ -53,7 +57,7 @@
     </top>
     <center>
     <VBox fx:id="noMatchText" alignment="CENTER" VBox.vgrow="ALWAYS">
-        <Text textAlignment="CENTER" text="Ingen Aktiv Kamp" />
+        <Text textAlignment="CENTER" styleClass="liveMatchTop" text="Ingen Aktiv Kamp" />
     </VBox>
     <TableView fx:id="liveMatchTable">
         <columns>
