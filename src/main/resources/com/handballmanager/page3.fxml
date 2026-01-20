@@ -20,7 +20,7 @@
             <TableColumn fx:id="teamNameCol" text="Hold Navn" />
             <TableColumn fx:id="scoredGoalsCol" text="Mål Scoret" />
             <TableColumn fx:id="goalsTakenCol" text="Mål Taget" />
-            <TableColumn fx:id="matchStatsCol" text="Vundet/Tabt/Ulige" />
+            <TableColumn fx:id="matchStatsCol" text="Vundet/Tabt/Uafgjort" />
         </columns>
         <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

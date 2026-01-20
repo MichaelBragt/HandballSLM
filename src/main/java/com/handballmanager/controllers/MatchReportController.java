@@ -36,6 +36,9 @@ public class MatchReportController {
     private MainController mainController;
     private final MatchReportService reportService = new MatchReportService();
 
+    /**
+     * JavaFX initialize method
+     */
     public void initialize() {
         // we want our top box to have equal width for the 3 inner boxes, we do that here
         topLeftBox.prefWidthProperty().bind(topBox.widthProperty().divide(3));
@@ -43,19 +46,36 @@ public class MatchReportController {
         topRightBox.prefWidthProperty().bind(topBox.widthProperty().divide(3));
     }
 
+    /**
+     * Method to handle go back button, since we have access to mainController
+     * we call mainController so set content back to matchView
+     * @param event
+     */
     public void goBack(ActionEvent event) {
         mainController.loadTabPage2();
     }
 
+    /**
+     * Method to set match object to the one we want to see
+     * @param match
+     */
     public void setMatch(MatchModel match) {
         this.match = match;
         loadReport(match);
     }
 
+    /**
+     * method to recieve mainController
+     * @param mainController
+     */
     public void setMainController(MainController mainController) {
         this.mainController = mainController;
     }
 
+    /**
+     * method to load and show the report for the specific match
+     * @param match
+     */
     private void loadReport(MatchModel match) {
 
         ObservableList<MatchEvent> matchEvents = FXCollections.observableList(reportService.fetchMatchReport(match.getId()));

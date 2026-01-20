@@ -29,12 +29,18 @@ public class Page3Controller {
     private LeagueModel leagueModel;
     private final LeagueDAO leagueDAO = new LeagueDAO();
 
+    /**
+     * JavaFx initialize method
+     */
     public void initialize() {
 
         loadLeague();
 
     }
 
+    /**
+     * method load load and insert all league data into our tableview
+     */
     private void loadLeague() {
 
         ObservableList<LeagueTableViewModel> leagueTableList = FXCollections.observableList(leagueDAO.getLeague());
@@ -45,6 +51,9 @@ public class Page3Controller {
         scoredGoalsCol.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getGoalsScored()));
         goalsTakenCol.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getGoalsAgainst()));
 
+        // this column needs to have several values so we create our own cell factory
+        // and Override updateItem and get our wins, losses, draws from the league object on that
+        // specific row
         matchStatsCol.setCellFactory(col -> new TableCell<>() {
             @Override
             protected void updateItem(Void item, boolean empty) {
@@ -53,13 +62,15 @@ public class Page3Controller {
                     setText(null);
                 }
                 else {
+                    // here we get our league object from the row we are on
                     LeagueTableViewModel row = getTableRow().getItem();
+                    // and set the format of our output
                     setText(row.getWins() + " - " + row.getLosses() + " - " + row.getDraws());
                 }
             }
         });
 
+        // we add it to our tableview
         leagueTable.setItems(leagueTableList);
     }
-
 }

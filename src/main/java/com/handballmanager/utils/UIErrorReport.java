@@ -26,11 +26,16 @@ public abstract class UIErrorReport {
         }
     }
 
+    /**
+     * methos to show various dql error inthe UI
+     * @param sqlEx
+     */
     private static void handleSqlError(SQLException sqlEx) {
 
         String sqlState = sqlEx.getSQLState();
         int errorCode = sqlEx.getErrorCode();
 
+        // DB connection errors always starts with 08
         if(sqlState != null && sqlState.startsWith("08")) {
             showAlert(
                     "Database connection error",
@@ -39,6 +44,7 @@ public abstract class UIErrorReport {
             );
         }
 
+        // login errors has errorcode 18456
         else if (errorCode == 18456) {
             showAlert(
                     "Login failed",
@@ -46,6 +52,7 @@ public abstract class UIErrorReport {
                     "Invalid database username or password."
             );
         }
+        // Other errors have an sqlState with 23000
         else if ("23000".equals(sqlState)) {
             showAlert(
                     "Invalid data",
@@ -53,6 +60,7 @@ public abstract class UIErrorReport {
                     "Data eksisterer allerede eller kan ikke opdateres\nPga. data constraint violations"
             );
         }
+        // or else just tell we have an sql error (SQLException)
         else {
             showAlert(
                     "Database error",
@@ -62,6 +70,12 @@ public abstract class UIErrorReport {
         }
     }
 
+    /**
+     * helper methos to show errors with info in the UI
+     * @param title
+     * @param header
+     * @param content
+     */
     public static void showAlert(String title, String header, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
@@ -69,8 +83,7 @@ public abstract class UIErrorReport {
         alert.setContentText(content);
         alert.showAndWait();
 
+        // should app close on error? for now NO
 //        Platform.exit(); // clean JavaFX shutdown
     }
-
-
 }

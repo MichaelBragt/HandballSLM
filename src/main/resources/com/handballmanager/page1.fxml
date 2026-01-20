@@ -23,7 +23,7 @@
          <columns>
            <TableColumn fx:id="nameColumn" text="Hold Navn" />
 <!--           <TableColumn fx:id="statColumn" text="Vundet - Tabt - Lige" />-->
-           <TableColumn fx:id="actions" />
+           <TableColumn fx:id="actions" text="#" />
          </columns>
           <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

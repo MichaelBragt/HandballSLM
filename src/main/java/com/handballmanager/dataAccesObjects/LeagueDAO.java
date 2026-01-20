@@ -35,7 +35,7 @@ public class LeagueDAO {
             "JOIN Team t ON t.id = l.team_id\n" +
             "WHERE l.league_id = 1\n" +
             "AND t.active = 1;\n";
-    private static final String SELECT_ALL = "";
+
     private static final String INSERT = "INSERT INTO League (team_id, league_id) VALUES (?,?) ";
     private static final String UPDATE_END_MATCH = "UPDATE League SET " +
             "points = points + ?, " +

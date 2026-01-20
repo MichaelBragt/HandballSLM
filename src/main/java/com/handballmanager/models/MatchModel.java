@@ -44,17 +44,9 @@ public class MatchModel {
         return team1;
     }
 
-//    public void setTeam_1_id(int team_1_id) {
-//        this.team_1_id = team_1_id;
-//    }
-
     public TeamModel getTeam2() {
         return team2;
     }
-
-//    public void setTeam_2_id(int team_2_id) {
-//        this.team_2_id = team_2_id;
-//    }
 
     public LocalDateTime getStart_time() {
         return start_time;

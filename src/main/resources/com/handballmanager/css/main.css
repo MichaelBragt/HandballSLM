@@ -1,8 +1,9 @@
-
+/*
 VBox, HBox, StackPane, BorderPane {
     -fx-border-color: rgba(255,0,0,0.6);
     -fx-border-width: 1;
 }
+*/
 
 
 .teamNames {
@@ -34,4 +35,32 @@ VBox, HBox, StackPane, BorderPane {
     -fx-border-radius: 44px;
     -fx-background-radius: 44px;
     -fx-alignment: center;
+}
+
+/* Goal button */
+.goal-button {
+    -fx-background-color: linear-gradient(
+        to right,
+        #1fbf63,
+        #35d97a
+    );
+    -fx-text-fill: white;
+}
+
+.goal-button:hover {
+    -fx-background-color: #2bdc7d;
+}
+
+/* Red card button */
+.red-card-button {
+    -fx-background-color: linear-gradient(
+        to right,
+        #e53935,
+        #ff5c5c
+    );
+    -fx-text-fill: white;
+}
+
+.red-card-button:hover {
+    -fx-background-color: #ff6b6b;
 }

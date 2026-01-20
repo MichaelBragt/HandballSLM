@@ -26,6 +26,7 @@ public class TeamDAO {
         // Try with resource, this is a safe way to use statements, as it auto closes after it is done
         // Syntax is: try() {}
         // this syntax returns the id of the created row, we need to decide if we need that
+        // NOT USED ANYMORE we use createWithConn
         try (PreparedStatement stmt = DBConnect.UNIQUE_CONNECT.getConnection().prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, team.getName());
             stmt.executeUpdate();
@@ -74,16 +75,10 @@ public class TeamDAO {
     public void update(TeamModel team) {
         // Try with resource, this is a safe way to use statements, as it auto closes after it is done
         // Syntax is: try() {}
-        // this syntax returns the id of the created row, we need to decide if we need that
-        try (PreparedStatement stmt = DBConnect.UNIQUE_CONNECT.getConnection().prepareStatement(UPDATE, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement stmt = DBConnect.UNIQUE_CONNECT.getConnection().prepareStatement(UPDATE)) {
             stmt.setString(1, team.getName());
             stmt.setInt(2, team.getId());
             stmt.executeUpdate();
-            try (ResultSet keys = stmt.getGeneratedKeys()) {
-                if (keys.next()) {
-                    team.setId(keys.getInt(1));
-                }
-            }
         }
         catch (SQLException e) {
             UIErrorReport.showDatabaseError(e);
@@ -93,6 +88,8 @@ public class TeamDAO {
 
     /**
      * method for deleting Team in database
+     * we actually do not delete the row but do a
+     * soft-delete and set active to 0
      * @param team
      * @return
      */
@@ -134,5 +131,4 @@ public class TeamDAO {
         }
         return teams;
     }
-
 }

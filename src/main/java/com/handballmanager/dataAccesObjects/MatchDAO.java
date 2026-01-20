@@ -14,10 +14,8 @@ import java.util.List;
 public class MatchDAO {
 
     private static final String INSERT = "INSERT INTO Match (team_1_id, team_2_id, match_length, start_time, end_time, status) VALUES (?,?,?,?,?,?)";
-    private static final String DELETE = "DELETE FROM Match WHERE id = ?";
     private static final String UPDATE_START_MATCH = "UPDATE Match set start_time = ?, status = ? WHERE id = ?";
     private static final String UPDATE_END_MATCH = "UPDATE Match set end_time = ?, status = ? WHERE id = ?";
-    private static final String UPDATE = "UPDATE Match SET (team_1_id, team_2_id, start_time, end_time, status) = (?,?,?,?,?) WHERE id = ?";
     private static final String SELECT_ALL =
             "SELECT m.id, m.start_time, m.end_time, m.status, t1.id AS team1_id, t1.name AS team1_name, t2.id AS team2_id, t2.name AS team2_name, " +
                     "SUM(CASE WHEN g.team_id = t1.id THEN 1 ELSE 0 END) AS team1_goals, " +
@@ -28,6 +26,10 @@ public class MatchDAO {
                     "LEFT JOIN Goals g ON g.match_id = m.id " +
                     "GROUP BY m.id, m.start_time, m.end_time, m.status, t1.id, t1.name, t2.id, t2.name;";
 
+    /**
+     * method to create a new match
+     * @param match
+     */
     public void create(MatchModel match) {
         // Try with resource, this is a safe way to use statements, as it auto closes after it is done
         // Syntax is: try() {}
@@ -52,10 +54,13 @@ public class MatchDAO {
         }
     }
 
+    /**
+     * method that is called when we start a match to set time and status of match
+     * @param match
+     */
     public void startMatch(MatchModel match) {
         // Try with resource, this is a safe way to use statements, as it auto closes after it is done
         // Syntax is: try() {}
-        // this syntax returns the id of the created row, we need to decide if we need that
         try (PreparedStatement stmt = DBConnect.UNIQUE_CONNECT.getConnection().prepareStatement(UPDATE_START_MATCH)) {
             stmt.setTimestamp(1, Timestamp.valueOf(LocalDateTime.now()));
             stmt.setString(2, MatchStatus.RUNNING.name());
@@ -68,6 +73,13 @@ public class MatchDAO {
         }
     }
 
+    /**
+     * method that is called when match ends to set time and status
+     * with connection passed because we call it from a service method, and we need
+     * database rollback feature in case of errors
+     * @param conn
+     * @param match
+     */
     public void endMatch(Connection conn, MatchModel match) {
         // Try with resource, this is a safe way to use statements, as it auto closes after it is done
         // Syntax is: try() {}
@@ -84,6 +96,10 @@ public class MatchDAO {
         }
     }
 
+    /**
+     * method to get all matches
+     * @return
+     */
     public List<MatchModel> selectAll() {
         List<MatchModel> matches = new ArrayList<>();
 

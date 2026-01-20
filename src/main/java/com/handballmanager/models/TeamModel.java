@@ -30,7 +30,7 @@ public class TeamModel {
         this.name = name;
     }
 
-    // tosTring for at vise navn på hold
+    // toString to show name for team
     @Override
     public String toString() {
         return name;

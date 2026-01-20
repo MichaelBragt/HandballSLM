@@ -7,18 +7,26 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class MatchTimeManager {
 
+    /**
+     * Our 2 listeners
+     */
     private TimeListener tickListener;
     private Runnable finishedCallback;
 
-    // Trådsikker executioner i java
+    // Threadsafe executioner in Java
     private final ScheduledExecutorService scheuduleCountdown = Executors.newSingleThreadScheduledExecutor();
 
-    // AtomicLong er et trådsikkert tal wrapped so Java selv sørger for alle tråede har
+    // AtomicLong er et trådsikkert tal wrapped so Java selv sørger for alle tråde har
     // nyeste værdi
     private final AtomicLong remainingGameTime = new AtomicLong();
     private volatile boolean pauseCountdown = false;
 
 
+    /**
+     * Our start timer method to start the executions and notify the listeners
+     * about things to be notified about :-)
+     * @param minutes
+     */
     public void startGameTimer(long minutes) {
         // sæt vores minutter gange 60 for at få sekunder
         remainingGameTime.set(minutes * 60);
