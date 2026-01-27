@@ -244,7 +244,33 @@ public class MatchPageController {
                     )
 
             );
+
+            // NON Lambda version
+            /*
+            timer.setListener(new TimeListener() {
+                @Override
+                public void onTimeChange(long remaining) {
+
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            counter.setText(Long.toString(remaining));
+                        }
+                    });
+
+                }
+            });
+            */
+
+
             // set up the second listener that is fired when timer hits zero
+            // In non lammbda terms this wraps a Runnable to run when it ticks
+//            timer.setFinishedCallback(new Runnable() {
+//                @Override
+//                public void run() {
+//                    // your code
+//                }
+//            });
             timer.setFinishedCallback(() -> {
                         MatchEndService endService = new MatchEndService();
                         endService.endMatchCleanUp(match, match.getTeam1().getId(), match.getTeam2().getId(), Integer.parseInt(leftSideScore.getText()), Integer.parseInt(rightSideScore.getText()));
